@@ -1,0 +1,82 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tomes",
+  "info": {
+    "singularName": "tome",
+    "pluralName": "tomes",
+    "displayName": "Tome",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "text"
+    },
+    "resume": {
+      "type": "text"
+    },
+    "picture": {
+      "type": "text"
+    },
+    "lang": {
+      "type": "enumeration",
+      "enum": [
+        "fr",
+        "en"
+      ]
+    },
+    "userViews": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "userPurchase": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "pagesNumber": {
+      "type": "integer",
+      "default": 0
+    },
+    "likesNumber": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "commentsNumber": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "blocked": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "author": {
+      "type": "string"
+    },
+    "coinsPrice": {
+      "type": "integer",
+      "default": 0
+    },
+    "chaptersNumber": {
+      "type": "integer",
+      "default": 0
+    },
+    "book": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::book.book"
+    },
+    "creator": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "oldTome": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

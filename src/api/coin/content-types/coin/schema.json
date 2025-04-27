@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "coins",
+  "info": {
+    "singularName": "coin",
+    "pluralName": "coins",
+    "displayName": "Coin",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "coinsNumber": {
+      "type": "integer"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    },
+    "price": {
+      "type": "float"
+    },
+    "currency": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::currency.currency"
+    }
+  }
+}

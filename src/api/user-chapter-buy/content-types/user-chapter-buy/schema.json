@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "user_chapter_buys",
+  "info": {
+    "singularName": "user-chapter-buy",
+    "pluralName": "user-chapter-buys",
+    "displayName": "UserChapterBuy",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "chapter": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::chapter.chapter"
+    },
+    "read": {
+      "type": "boolean",
+      "default": true
+    },
+    "active": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

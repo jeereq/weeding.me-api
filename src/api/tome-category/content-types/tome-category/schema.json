@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tome_categories",
+  "info": {
+    "singularName": "tome-category",
+    "pluralName": "tome-categories",
+    "displayName": "TomeCategory",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "tome": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::tome.tome"
+    },
+    "category": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::category.category"
+    }
+  }
+}

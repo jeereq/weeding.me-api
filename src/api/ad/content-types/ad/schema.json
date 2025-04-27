@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "ads",
+  "info": {
+    "singularName": "ad",
+    "pluralName": "ads",
+    "displayName": "Ad",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "picture": {
+      "type": "string"
+    },
+    "active": {
+      "type": "boolean"
+    },
+    "tome": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::tome.tome"
+    },
+    "promotion": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}
