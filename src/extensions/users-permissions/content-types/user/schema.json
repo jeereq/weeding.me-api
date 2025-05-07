@@ -64,55 +64,6 @@
       "target": "plugin::users-permissions.role",
       "inversedBy": "users",
       "configurable": false
-    },
-    "gender": {
-      "type": "enumeration",
-      "enum": [
-        "M",
-        "F"
-      ]
-    },
-    "picture": {
-      "type": "text"
-    },
-    "phoneNumber": {
-      "type": "string"
-    },
-    "birthDate": {
-      "type": "date"
-    },
-    "paymentPhoneNumber": {
-      "type": "string"
-    },
-    "userCoins": {
-      "type": "biginteger"
-    },
-    "level": {
-      "type": "integer",
-      "required": true,
-      "default": 0
-    },
-    "reference": {
-      "type": "string"
-    },
-    "ageRange": {
-      "type": "string"
-    },
-    "pseudo": {
-      "type": "string"
-    },
-    "creator": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "plugin::users-permissions.user"
-    },
-    "userCoinsWin": {
-      "type": "float",
-      "default": 0
-    },
-    "userCoinsSave": {
-      "type": "float",
-      "default": 0
     }
   }
 }
