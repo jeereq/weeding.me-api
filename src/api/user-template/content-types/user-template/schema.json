@@ -32,9 +32,6 @@
     "date": {
       "type": "date"
     },
-    "time": {
-      "type": "time"
-    },
     "address": {
       "type": "string"
     },
@@ -57,7 +54,7 @@
       "type": "enumeration",
       "enum": [
         "couple",
-        "celibataire"
+        "singel"
       ]
     },
     "nameInvitation": {
@@ -86,6 +83,9 @@
     "active": {
       "type": "boolean",
       "default": false
+    },
+    "time": {
+      "type": "string"
     }
   }
 }

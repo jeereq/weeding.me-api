@@ -392,12 +392,13 @@ module.exports = {
     ctx.send({ data: users })
   },
   async commander(ctx) {
-    const { initiateurDeLaDemande, phone, password = "123456", email = "mingandajeereq@gmail.com", template, day, month, year, lat, lng, title, invitations, city, country } = ctx.request.body.data || {}
+    const { address, nameInvitation, time, date, men, image, typeInvitation, women, initiateurDeLaDemande, phone, password = "123456", email = "mingandajeereq@gmail.com", template, day, month, year, lat, lng, title, invitations, city, country } = ctx.request.body.data || {}
 
 
     const user = await strapi
       .query("plugin::users-permissions.user")
       .findOne({ where: { phone }, populate: true });
+
     if (user) {
       ctx.send({
         data: null,
@@ -427,10 +428,20 @@ module.exports = {
             year,
             lat,
             lng,
+            men,
+            women,
+            image,
             title,
             invitations,
+            initiateurDeLaDemande,
             city,
-            country
+            country,
+            typeInvitation,
+            address,
+            nameInvitation,
+            date,
+            phone,
+            time
           }
         })
 

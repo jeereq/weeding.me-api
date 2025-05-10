@@ -424,14 +424,13 @@ export interface ApiUserTemplateUserTemplate extends Schema.CollectionType {
     month: Attribute.String;
     year: Attribute.String;
     date: Attribute.Date;
-    time: Attribute.Time;
     address: Attribute.String;
     lat: Attribute.String;
     lng: Attribute.String;
     title: Attribute.String;
     men: Attribute.String;
     women: Attribute.String;
-    typeInvitation: Attribute.Enumeration<['couple', 'celibataire']>;
+    typeInvitation: Attribute.Enumeration<['couple', 'singel']>;
     nameInvitation: Attribute.String;
     heart: Attribute.Boolean & Attribute.DefaultTo<true>;
     initiateurDeLaDemande: Attribute.String;
@@ -440,6 +439,7 @@ export interface ApiUserTemplateUserTemplate extends Schema.CollectionType {
     city: Attribute.String;
     country: Attribute.String;
     active: Attribute.Boolean & Attribute.DefaultTo<false>;
+    time: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
