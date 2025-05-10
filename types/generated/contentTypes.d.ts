@@ -362,6 +362,101 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
+export interface ApiInvitationInvitation extends Schema.CollectionType {
+  collectionName: 'invitations';
+  info: {
+    singularName: 'invitation';
+    pluralName: 'invitations';
+    displayName: 'invitation';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    userTemplate: Attribute.Relation<
+      'api::invitation.invitation',
+      'oneToOne',
+      'api::user-template.user-template'
+    >;
+    phone: Attribute.String;
+    email: Attribute.Email;
+    messageSend: Attribute.Boolean & Attribute.DefaultTo<true>;
+    messageRead: Attribute.Boolean & Attribute.DefaultTo<true>;
+    name: Attribute.String;
+    type: Attribute.Enumeration<['couple', 'celibataire']>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::invitation.invitation',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::invitation.invitation',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiUserTemplateUserTemplate extends Schema.CollectionType {
+  collectionName: 'user_templates';
+  info: {
+    singularName: 'user-template';
+    pluralName: 'user-templates';
+    displayName: 'userTemplate';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    user: Attribute.Relation<
+      'api::user-template.user-template',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    template: Attribute.BigInteger;
+    day: Attribute.String;
+    month: Attribute.String;
+    year: Attribute.String;
+    date: Attribute.Date;
+    time: Attribute.Time;
+    address: Attribute.String;
+    lat: Attribute.String;
+    lng: Attribute.String;
+    title: Attribute.String;
+    men: Attribute.String;
+    women: Attribute.String;
+    typeInvitation: Attribute.Enumeration<['couple', 'celibataire']>;
+    nameInvitation: Attribute.String;
+    heart: Attribute.Boolean & Attribute.DefaultTo<true>;
+    initiateurDeLaDemande: Attribute.String;
+    phone: Attribute.String;
+    invitations: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
+    city: Attribute.String;
+    country: Attribute.String;
+    active: Attribute.Boolean & Attribute.DefaultTo<false>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::user-template.user-template',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::user-template.user-template',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -659,23 +754,10 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
-    gender: Attribute.Enumeration<['M', 'F']>;
-    picture: Attribute.Text;
-    phoneNumber: Attribute.String;
-    birthDate: Attribute.Date;
-    paymentPhoneNumber: Attribute.String;
-    userCoins: Attribute.BigInteger;
-    level: Attribute.Integer & Attribute.Required & Attribute.DefaultTo<0>;
-    reference: Attribute.String;
-    ageRange: Attribute.String;
-    pseudo: Attribute.String;
-    creator: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    userCoinsWin: Attribute.Float & Attribute.DefaultTo<0>;
-    userCoinsSave: Attribute.Float & Attribute.DefaultTo<0>;
+    phone: Attribute.String;
+    phoneCode: Attribute.String;
+    confirmPassword: Attribute.String;
+    lastLogin: Attribute.DateTime;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -686,571 +768,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'plugin::users-permissions.user',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiAdAd extends Schema.CollectionType {
-  collectionName: 'ads';
-  info: {
-    singularName: 'ad';
-    pluralName: 'ads';
-    displayName: 'Ad';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    title: Attribute.String;
-    description: Attribute.Text;
-    picture: Attribute.String;
-    active: Attribute.Boolean;
-    tome: Attribute.Relation<'api::ad.ad', 'oneToOne', 'api::tome.tome'>;
-    promotion: Attribute.Boolean & Attribute.DefaultTo<true>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<'api::ad.ad', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<'api::ad.ad', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-  };
-}
-
-export interface ApiBookBook extends Schema.CollectionType {
-  collectionName: 'books';
-  info: {
-    singularName: 'book';
-    pluralName: 'books';
-    displayName: 'Book';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    name: Attribute.String;
-    resume: Attribute.Text;
-    picture: Attribute.Text;
-    publishingDate: Attribute.String;
-    creator: Attribute.Relation<
-      'api::book.book',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<'api::book.book', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<'api::book.book', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-  };
-}
-
-export interface ApiCategoryCategory extends Schema.CollectionType {
-  collectionName: 'categories';
-  info: {
-    singularName: 'category';
-    pluralName: 'categories';
-    displayName: 'category';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    name: Attribute.String;
-    picture: Attribute.Text;
-    creator: Attribute.Relation<
-      'api::category.category',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    type: Attribute.Enumeration<['Year', 'Category']>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::category.category',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::category.category',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiChapterChapter extends Schema.CollectionType {
-  collectionName: 'chapters';
-  info: {
-    singularName: 'chapter';
-    pluralName: 'chapters';
-    displayName: 'Chapter';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    name: Attribute.String;
-    resume: Attribute.Text;
-    fileLink: Attribute.Text;
-    coinsPrice: Attribute.Integer;
-    number: Attribute.Integer;
-    fileSize: Attribute.Integer;
-    tome: Attribute.Relation<
-      'api::chapter.chapter',
-      'oneToOne',
-      'api::tome.tome'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::chapter.chapter',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::chapter.chapter',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiCoinCoin extends Schema.CollectionType {
-  collectionName: 'coins';
-  info: {
-    singularName: 'coin';
-    pluralName: 'coins';
-    displayName: 'Coin';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    coinsNumber: Attribute.Integer;
-    active: Attribute.Boolean & Attribute.DefaultTo<true>;
-    price: Attribute.Float;
-    currency: Attribute.Relation<
-      'api::coin.coin',
-      'oneToOne',
-      'api::currency.currency'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<'api::coin.coin', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<'api::coin.coin', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-  };
-}
-
-export interface ApiCurrencyCurrency extends Schema.CollectionType {
-  collectionName: 'currencies';
-  info: {
-    singularName: 'currency';
-    pluralName: 'currencies';
-    displayName: 'currency';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    name: Attribute.String;
-    symbol: Attribute.String;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::currency.currency',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::currency.currency',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiTomeTome extends Schema.CollectionType {
-  collectionName: 'tomes';
-  info: {
-    singularName: 'tome';
-    pluralName: 'tomes';
-    displayName: 'Tome';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    name: Attribute.Text;
-    resume: Attribute.Text;
-    picture: Attribute.Text;
-    lang: Attribute.Enumeration<['fr', 'en']>;
-    userViews: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
-    userPurchase: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
-    pagesNumber: Attribute.Integer & Attribute.DefaultTo<0>;
-    likesNumber: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
-    commentsNumber: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
-    blocked: Attribute.Boolean &
-      Attribute.Required &
-      Attribute.DefaultTo<false>;
-    author: Attribute.String;
-    coinsPrice: Attribute.Integer & Attribute.DefaultTo<0>;
-    chaptersNumber: Attribute.Integer & Attribute.DefaultTo<0>;
-    book: Attribute.Relation<'api::tome.tome', 'oneToOne', 'api::book.book'>;
-    creator: Attribute.Relation<
-      'api::tome.tome',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    oldTome: Attribute.Boolean & Attribute.DefaultTo<true>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<'api::tome.tome', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<'api::tome.tome', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-  };
-}
-
-export interface ApiTomeCategoryTomeCategory extends Schema.CollectionType {
-  collectionName: 'tome_categories';
-  info: {
-    singularName: 'tome-category';
-    pluralName: 'tome-categories';
-    displayName: 'TomeCategory';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    tome: Attribute.Relation<
-      'api::tome-category.tome-category',
-      'oneToOne',
-      'api::tome.tome'
-    >;
-    category: Attribute.Relation<
-      'api::tome-category.tome-category',
-      'oneToOne',
-      'api::category.category'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::tome-category.tome-category',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::tome-category.tome-category',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiUserCategoryUserCategory extends Schema.CollectionType {
-  collectionName: 'user_categories';
-  info: {
-    singularName: 'user-category';
-    pluralName: 'user-categories';
-    displayName: 'UserCategory';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    category: Attribute.Relation<
-      'api::user-category.user-category',
-      'oneToOne',
-      'api::category.category'
-    >;
-    user: Attribute.Relation<
-      'api::user-category.user-category',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::user-category.user-category',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::user-category.user-category',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiUserChapterBuyUserChapterBuy extends Schema.CollectionType {
-  collectionName: 'user_chapter_buys';
-  info: {
-    singularName: 'user-chapter-buy';
-    pluralName: 'user-chapter-buys';
-    displayName: 'UserChapterBuy';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    user: Attribute.Relation<
-      'api::user-chapter-buy.user-chapter-buy',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    chapter: Attribute.Relation<
-      'api::user-chapter-buy.user-chapter-buy',
-      'oneToOne',
-      'api::chapter.chapter'
-    >;
-    read: Attribute.Boolean & Attribute.DefaultTo<true>;
-    active: Attribute.Boolean & Attribute.DefaultTo<false>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::user-chapter-buy.user-chapter-buy',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::user-chapter-buy.user-chapter-buy',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiUserCoinUserCoin extends Schema.CollectionType {
-  collectionName: 'user_coins';
-  info: {
-    singularName: 'user-coin';
-    pluralName: 'user-coins';
-    displayName: 'UserCoin';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    user: Attribute.Relation<
-      'api::user-coin.user-coin',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    coin: Attribute.Relation<
-      'api::user-coin.user-coin',
-      'oneToOne',
-      'api::coin.coin'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::user-coin.user-coin',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::user-coin.user-coin',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiUserTomeCommentUserTomeComment
-  extends Schema.CollectionType {
-  collectionName: 'user_tome_comments';
-  info: {
-    singularName: 'user-tome-comment';
-    pluralName: 'user-tome-comments';
-    displayName: 'UserTomeComment';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    tome: Attribute.Relation<
-      'api::user-tome-comment.user-tome-comment',
-      'oneToOne',
-      'api::tome.tome'
-    >;
-    user: Attribute.Relation<
-      'api::user-tome-comment.user-tome-comment',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    comment: Attribute.Text;
-    note: Attribute.Integer;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::user-tome-comment.user-tome-comment',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::user-tome-comment.user-tome-comment',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiUserTomeFavoriteUserTomeFavorite
-  extends Schema.CollectionType {
-  collectionName: 'user_tome_favorites';
-  info: {
-    singularName: 'user-tome-favorite';
-    pluralName: 'user-tome-favorites';
-    displayName: 'UserTomeFavorite';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    tome: Attribute.Relation<
-      'api::user-tome-favorite.user-tome-favorite',
-      'oneToOne',
-      'api::tome.tome'
-    >;
-    user: Attribute.Relation<
-      'api::user-tome-favorite.user-tome-favorite',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    active: Attribute.Boolean & Attribute.DefaultTo<true>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::user-tome-favorite.user-tome-favorite',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::user-tome-favorite.user-tome-favorite',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiUserTomeLikeUserTomeLike extends Schema.CollectionType {
-  collectionName: 'user_tome_likes';
-  info: {
-    singularName: 'user-tome-like';
-    pluralName: 'user-tome-likes';
-    displayName: 'UserTomeLike';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    tome: Attribute.Relation<
-      'api::user-tome-like.user-tome-like',
-      'oneToOne',
-      'api::tome.tome'
-    >;
-    user: Attribute.Relation<
-      'api::user-tome-like.user-tome-like',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::user-tome-like.user-tome-like',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::user-tome-like.user-tome-like',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiUserTomeSignalUserTomeSignal extends Schema.CollectionType {
-  collectionName: 'user_tome_signals';
-  info: {
-    singularName: 'user-tome-signal';
-    pluralName: 'user-tome-signals';
-    displayName: 'UserTomeSignal';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    tome: Attribute.Relation<
-      'api::user-tome-signal.user-tome-signal',
-      'oneToOne',
-      'api::tome.tome'
-    >;
-    user: Attribute.Relation<
-      'api::user-tome-signal.user-tome-signal',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    message: Attribute.Text;
-    processed: Attribute.Boolean & Attribute.DefaultTo<false>;
-    type: Attribute.Enumeration<['dangerous', 'plagiarism', 'inappropriate']>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::user-tome-signal.user-tome-signal',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::user-tome-signal.user-tome-signal',
       'oneToOne',
       'admin::user'
     > &
@@ -1268,27 +785,14 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
+      'api::invitation.invitation': ApiInvitationInvitation;
+      'api::user-template.user-template': ApiUserTemplateUserTemplate;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::i18n.locale': PluginI18NLocale;
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
-      'api::ad.ad': ApiAdAd;
-      'api::book.book': ApiBookBook;
-      'api::category.category': ApiCategoryCategory;
-      'api::chapter.chapter': ApiChapterChapter;
-      'api::coin.coin': ApiCoinCoin;
-      'api::currency.currency': ApiCurrencyCurrency;
-      'api::tome.tome': ApiTomeTome;
-      'api::tome-category.tome-category': ApiTomeCategoryTomeCategory;
-      'api::user-category.user-category': ApiUserCategoryUserCategory;
-      'api::user-chapter-buy.user-chapter-buy': ApiUserChapterBuyUserChapterBuy;
-      'api::user-coin.user-coin': ApiUserCoinUserCoin;
-      'api::user-tome-comment.user-tome-comment': ApiUserTomeCommentUserTomeComment;
-      'api::user-tome-favorite.user-tome-favorite': ApiUserTomeFavoriteUserTomeFavorite;
-      'api::user-tome-like.user-tome-like': ApiUserTomeLikeUserTomeLike;
-      'api::user-tome-signal.user-tome-signal': ApiUserTomeSignalUserTomeSignal;
     }
   }
 }
