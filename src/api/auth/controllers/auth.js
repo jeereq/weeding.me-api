@@ -499,7 +499,7 @@ module.exports = {
     })
   },
   async commanderWithoutUser(ctx) {
-    const { user, address, nameInvitation, time, date, men, image, typeInvitation, women, initiateurDeLaDemande, phone, template, day, month, year, lat, lng, title, invitations, city, country } = ctx.request.body.data || {}
+    const { user, address, nameInvitation, time, date, men, image, typeInvitation, women, initiateurDeLaDemande, price, phone, template, day, month, year, lat, lng, title, invitations, city, country } = ctx.request.body.data || {}
 
     const invitation = await strapi
       .query("api::user-template.user-template")
@@ -525,7 +525,8 @@ module.exports = {
           nameInvitation,
           date,
           phone,
-          time
+          time,
+          price
         }
       })
 
