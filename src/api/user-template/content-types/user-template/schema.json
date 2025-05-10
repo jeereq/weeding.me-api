@@ -1,0 +1,91 @@
+{
+  "kind": "collectionType",
+  "collectionName": "user_templates",
+  "info": {
+    "singularName": "user-template",
+    "pluralName": "user-templates",
+    "displayName": "userTemplate",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "template": {
+      "type": "biginteger"
+    },
+    "day": {
+      "type": "string"
+    },
+    "month": {
+      "type": "string"
+    },
+    "year": {
+      "type": "string"
+    },
+    "date": {
+      "type": "date"
+    },
+    "time": {
+      "type": "time"
+    },
+    "address": {
+      "type": "string"
+    },
+    "lat": {
+      "type": "string"
+    },
+    "lng": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "men": {
+      "type": "string"
+    },
+    "women": {
+      "type": "string"
+    },
+    "typeInvitation": {
+      "type": "enumeration",
+      "enum": [
+        "couple",
+        "celibataire"
+      ]
+    },
+    "nameInvitation": {
+      "type": "string"
+    },
+    "heart": {
+      "type": "boolean",
+      "default": true
+    },
+    "initiateurDeLaDemande": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "invitations": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "city": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "active": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

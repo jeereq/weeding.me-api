@@ -6,6 +6,5 @@ const getService = (name) => {
 };
 
 module.exports = {
-  getService,
-
+  getService
 };

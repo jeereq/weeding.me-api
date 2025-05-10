@@ -64,6 +64,18 @@
       "target": "plugin::users-permissions.role",
       "inversedBy": "users",
       "configurable": false
+    },
+    "phone": {
+      "type": "string"
+    },
+    "phoneCode": {
+      "type": "string"
+    },
+    "confirmPassword": {
+      "type": "string"
+    },
+    "lastLogin": {
+      "type": "datetime"
     }
   }
 }

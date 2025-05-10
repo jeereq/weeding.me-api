@@ -14,33 +14,29 @@ const validatePassword = (password, hash) => {
   return bcrypt.compare(password, hash);
 }
 
-const ENTITY = "BUKU PRO";
+const ENTITY = "wedding.me";
 
 const sanitizeUser = (user, ctx) => {
   const { auth } = ctx.state;
   const userSchema = strapi.getModel("plugin::users-permissions.user");
-
   return sanitize.contentAPI.output(user, userSchema, { auth });
 };
 
 module.exports = {
   createUser: async (ctx) => {
     try {
-      const { confirmPassword, password, phoneNumber, categories } =
+      const { confirmPassword, password, phone } =
         ctx.request.body.data;
 
       const isPasswordExist = await strapi
-        .service("api::authentification.authentification")
+        .service("api::auth.auth")
         .paramsExist(password);
       const isPhoneNumberExist = await strapi
-        .service("api::authentification.authentification")
-        .paramsExist(phoneNumber);
-      const isCategoryExist = await strapi
-        .service("api::authentification.authentification")
-        .paramsExist(categories);
+        .service("api::auth.auth")
+        .paramsExist(phone);
 
       const passwordCorrespond = await strapi
-        .service("api::authentification.authentification")
+        .service("api::auth.auth")
         .confirmedPass(password, confirmPassword);
 
 
@@ -57,8 +53,8 @@ module.exports = {
         );
 
       const userWithThisPhoneNumberExists = await strapi
-        .service("api::authentification.authentification")
-        .userWithTheSamePhoneNumber(phoneNumber);
+        .service("api::auth.auth")
+        .userWithTheSamePhoneNumber(phone);
 
       if (userWithThisPhoneNumberExists)
         return ctx.send(
@@ -67,32 +63,26 @@ module.exports = {
         );
 
       const user = await strapi
-        .service("api::authentification.authentification")
-        .createUser({ data: { ...ctx.request.body.data, password: await generatePasswordHashed(password) } });
+        .service("api::auth.auth")
+        .createUser({ data: { confirmPassword: await generatePasswordHashed(confirmPassword), phone, password: await generatePasswordHashed(password) } });
 
       if (user.message) return ctx.send(user, 404);
 
       const generatedCode = strapi
-        .service("api::authentification.authentification")
+        .service("api::auth.auth")
         .generateCode(2);
 
-      if (user.phoneNumber) {
+      if (user.phone) {
+
         user.resetPasswordToken = generatedCode;
-        user.receiptedSMS = false;
         user.confirmed = true;
+
         const data = user;
         const { id } = user;
+
         await strapi
           .query("plugin::users-permissions.user")
           .update({ data, where: { id } });
-        if (isCategoryExist) {
-          categories.forEach((category) => {
-            strapi.service("api::user-category.user-category").create({
-              connect: { user: id, category },
-              data: { user: id, category },
-            });
-          });
-        }
       }
 
       return ctx.send(await sanitizeUser(user, ctx), 200);
@@ -103,14 +93,14 @@ module.exports = {
   },
   confirmedAccount: async (ctx) => {
     try {
-      const { phoneNumber, code } = ctx.request.body.data;
+      const { phone, code } = ctx.request.body.data;
 
       const isCodeExist = await strapi
-        .service("api::authentification.authentification")
+        .service("api::auth.auth")
         .paramsExist(code);
       const isPhoneNumberExist = await strapi
-        .service("api::authentification.authentification")
-        .paramsExist(phoneNumber);
+        .service("api::auth.auth")
+        .paramsExist(phone);
 
       if (!isCodeExist || !isPhoneNumberExist)
         return ctx.send(
@@ -120,7 +110,7 @@ module.exports = {
 
       const user = await strapi
         .query("plugin::users-permissions.user")
-        .findOne({ where: { phoneNumber, resetPasswordToken: code } });
+        .findOne({ where: { phone, resetPasswordToken: code } });
 
       if (!user)
         return ctx.send(
@@ -150,11 +140,11 @@ module.exports = {
   },
   RequestChangePasswordAccount: async (ctx) => {
     try {
-      const { phoneNumber } = ctx.request.body.data;
+      const { phone } = ctx.request.body.data;
 
       const isPhoneNumberExist = await strapi
-        .service("api::authentification.authentification")
-        .paramsExist(phoneNumber);
+        .service("api::auth.auth")
+        .paramsExist(phone);
 
       if (!isPhoneNumberExist) {
         return ctx.send(
@@ -165,7 +155,7 @@ module.exports = {
 
       const user = await strapi
         .query("plugin::users-permissions.user")
-        .findOne({ where: { phoneNumber } });
+        .findOne({ where: { phone } });
 
       if (!user) {
         return ctx.send(
@@ -175,10 +165,10 @@ module.exports = {
       }
 
       const generatedCode = strapi
-        .service("api::authentification.authentification")
+        .service("api::auth.auth")
         .generateCode(2);
 
-      if (user.phoneNumber) {
+      if (user.phone) {
         const paramsMessage = {};
 
         paramsMessage.message = `Bonjour ${user.username},
@@ -187,7 +177,7 @@ module.exports = {
          Si vous n'avez pas demandé cette modification, veuillez ignorer ce message.
          Si vous avez des questions, n'hésitez pas à nous contacter.`;
 
-        paramsMessage.recipient = user.phoneNumber;
+        paramsMessage.recipient = user.phone;
 
         const sendSMS = await strapi
           .service("api::sms.sms")
@@ -224,20 +214,20 @@ module.exports = {
   },
   changePasswordAccount: async (ctx) => {
     try {
-      const { phoneNumber, code, password, confirmPassword } =
+      const { phone, code, password, confirmPassword } =
         ctx.request.body.data;
 
       const isCodeExist = await strapi
-        .service("api::authentification.authentification")
+        .service("api::auth.auth")
         .paramsExist(code);
       const isPasswordExist = await strapi
-        .service("api::authentification.authentification")
+        .service("api::auth.auth")
         .paramsExist(password);
       const isPhoneNumberExist = await strapi
-        .service("api::authentification.authentification")
-        .paramsExist(phoneNumber);
+        .service("api::auth.auth")
+        .paramsExist(phone);
       const passwordCorrespond = await strapi
-        .service("api::authentification.authentification")
+        .service("api::auth.auth")
         .confirmedPass(password, confirmPassword);
 
       if (!isCodeExist || !isPhoneNumberExist || !isPasswordExist)
@@ -254,7 +244,7 @@ module.exports = {
 
       const user = await strapi
         .query("plugin::users-permissions.user")
-        .findOne({ where: { phoneNumber, resetPasswordToken: code } });
+        .findOne({ where: { phone, resetPasswordToken: code } });
 
       if (!user)
         return ctx.send(
@@ -273,7 +263,7 @@ module.exports = {
         .query("plugin::users-permissions.user")
         .update({ data, where: { id } });
 
-      if (user.phoneNumber) {
+      if (user.phone) {
         const paramsMessage = {};
         paramsMessage.message = `Bonjour ${user.username},
           Nous vous confirmons que votre mot de passe pour votre compte ${ENTITY} a été modifié avec succès.
@@ -282,7 +272,7 @@ module.exports = {
           Si vous avez des questions, n'hésitez pas à nous contacter.
           Cordialement,
           ${ENTITY}`;
-        paramsMessage.recipient = user.phoneNumber;
+        paramsMessage.recipient = user.phone;
         const sendSMS = await strapi
           .service("api::sms.sms")
           .sendSms(paramsMessage);
@@ -310,17 +300,17 @@ module.exports = {
       return ctx.send({ message: "Quelque chose a mal tourné." }, 500);
     }
   },
-  login: async (ctx) => {
+  async login(ctx) {
     try {
-      const { phoneNumber, password } = ctx.request.body.data;
+      const { email, password } = ctx.request.body.data;
       const isPasswordExist = await strapi
-        .service("api::authentification.authentification")
+        .service("api::auth.auth")
         .paramsExist(password);
-      const isPhoneNumberExist = await strapi
-        .service("api::authentification.authentification")
-        .paramsExist(phoneNumber);
+      const isEmail = await strapi
+        .service("api::auth.auth")
+        .paramsExist(email);
 
-      if (!isPasswordExist || !isPhoneNumberExist) {
+      if (!isPasswordExist || !isEmail) {
         return ctx.send(
           { message: "Les champs obligatoires sont vides" },
           400
@@ -329,7 +319,7 @@ module.exports = {
 
       const user = await strapi
         .query("plugin::users-permissions.user")
-        .findOne({ where: { phoneNumber } });
+        .update({ where: { email }, data: { lastLogin: new Date() }, populate: true });
 
       if (!user) {
         return ctx.send(
@@ -352,11 +342,19 @@ module.exports = {
       if (user.blocked) {
         return ctx.send({ message: "Compte bloqué" }, 400);
       }
-      const userCategories = await strapi.query('api::user-category.user-category').findMany({ where: { user: { id: user.id } }, populate: true })
+
+      const templates = await strapi
+        .query("api::user-template.user-template").findMany({
+          user: { id: user.id }
+        })
       return ctx.send(
         {
           jwt: getService("jwt").issue({ id: user.id }),
-          user: { ...await sanitizeUser(user, ctx), userCategories },
+          data: {
+            ...await sanitizeUser(user, ctx),
+            templates,
+            guests: []
+          }
         },
         200
       );
@@ -368,7 +366,79 @@ module.exports = {
     const { id, ...data } = ctx.request.body.data;
     const user = await strapi
       .query("plugin::users-permissions.user")
-      .update({ data, where: { id } });
+      .update({ data, where: { id }, populate: true });
     return ctx.send({ data: user, status: 200 }, 200)
+  },
+  async users(ctx) {
+    const { } = ctx.request.body.data || {}
+    const users = await strapi
+      .query("plugin::users-permissions.user")
+      .findMany({ populate: true });
+
+    ctx.send({ data: users })
+  },
+  async invitations(ctx) {
+    const { id } = ctx.request.body.data || {}
+    const users = await strapi
+      .query("api::invitation.invitation")
+      .findMany({
+        where: {
+          userTemplate: {
+            user: { id }
+          }
+        }
+      });
+
+    ctx.send({ data: users })
+  },
+  async commander(ctx) {
+    const { initiateurDeLaDemande, phone, password = "123456", email = "mingandajeereq@gmail.com", template, day, month, year, lat, lng, title, invitations, city, country } = ctx.request.body.data || {}
+
+
+    const user = await strapi
+      .query("plugin::users-permissions.user")
+      .findOne({ where: { phone }, populate: true });
+    if (user) {
+      ctx.send({
+        data: null,
+        message: "Utulisateur présent dans notre bd, connectez vous dans votre compte et ajouter d'autre model d'invitation  !"
+      }, 200)
+    } else {
+      const { id } = await strapi
+        .query("plugin::users-permissions.user")
+        .create({
+          data: {
+            email,
+            username: initiateurDeLaDemande,
+            phone,
+            password,
+            confirmed: false,
+            role: 4
+          }
+        });
+      const invitation = await strapi
+        .query("api::user-template.user-template")
+        .create({
+          data: {
+            user: id,
+            template,
+            day,
+            month,
+            year,
+            lat,
+            lng,
+            title,
+            invitations,
+            city,
+            country
+          }
+        })
+
+      ctx.send({
+        data: invitation,
+        message: "Votre commande a été envoyé !"
+      })
+
+    }
   }
 };

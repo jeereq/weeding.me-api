@@ -362,6 +362,101 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
+export interface ApiInvitationInvitation extends Schema.CollectionType {
+  collectionName: 'invitations';
+  info: {
+    singularName: 'invitation';
+    pluralName: 'invitations';
+    displayName: 'invitation';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    userTemplate: Attribute.Relation<
+      'api::invitation.invitation',
+      'oneToOne',
+      'api::user-template.user-template'
+    >;
+    phone: Attribute.String;
+    email: Attribute.Email;
+    messageSend: Attribute.Boolean & Attribute.DefaultTo<true>;
+    messageRead: Attribute.Boolean & Attribute.DefaultTo<true>;
+    name: Attribute.String;
+    type: Attribute.Enumeration<['couple', 'celibataire']>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::invitation.invitation',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::invitation.invitation',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiUserTemplateUserTemplate extends Schema.CollectionType {
+  collectionName: 'user_templates';
+  info: {
+    singularName: 'user-template';
+    pluralName: 'user-templates';
+    displayName: 'userTemplate';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    user: Attribute.Relation<
+      'api::user-template.user-template',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    template: Attribute.BigInteger;
+    day: Attribute.String;
+    month: Attribute.String;
+    year: Attribute.String;
+    date: Attribute.Date;
+    time: Attribute.Time;
+    address: Attribute.String;
+    lat: Attribute.String;
+    lng: Attribute.String;
+    title: Attribute.String;
+    men: Attribute.String;
+    women: Attribute.String;
+    typeInvitation: Attribute.Enumeration<['couple', 'celibataire']>;
+    nameInvitation: Attribute.String;
+    heart: Attribute.Boolean & Attribute.DefaultTo<true>;
+    initiateurDeLaDemande: Attribute.String;
+    phone: Attribute.String;
+    invitations: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
+    city: Attribute.String;
+    country: Attribute.String;
+    active: Attribute.Boolean & Attribute.DefaultTo<false>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::user-template.user-template',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::user-template.user-template',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -659,6 +754,10 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    phone: Attribute.String;
+    phoneCode: Attribute.String;
+    confirmPassword: Attribute.String;
+    lastLogin: Attribute.DateTime;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -686,6 +785,8 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
+      'api::invitation.invitation': ApiInvitationInvitation;
+      'api::user-template.user-template': ApiUserTemplateUserTemplate;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::i18n.locale': PluginI18NLocale;

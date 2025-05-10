@@ -1,0 +1,45 @@
+{
+  "kind": "collectionType",
+  "collectionName": "invitations",
+  "info": {
+    "singularName": "invitation",
+    "pluralName": "invitations",
+    "displayName": "invitation",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "userTemplate": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::user-template.user-template"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    },
+    "messageSend": {
+      "type": "boolean",
+      "default": true
+    },
+    "messageRead": {
+      "type": "boolean",
+      "default": true
+    },
+    "name": {
+      "type": "string"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "couple",
+        "celibataire"
+      ]
+    }
+  }
+}
