@@ -432,7 +432,6 @@ export interface ApiUserTemplateUserTemplate extends Schema.CollectionType {
     women: Attribute.String;
     typeInvitation: Attribute.Enumeration<['couple', 'singel']>;
     nameInvitation: Attribute.String;
-    heart: Attribute.Boolean & Attribute.DefaultTo<true>;
     initiateurDeLaDemande: Attribute.String;
     phone: Attribute.String;
     invitations: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
@@ -440,6 +439,10 @@ export interface ApiUserTemplateUserTemplate extends Schema.CollectionType {
     country: Attribute.String;
     active: Attribute.Boolean & Attribute.DefaultTo<false>;
     time: Attribute.String;
+    color: Attribute.String & Attribute.DefaultTo<'black'>;
+    heart: Attribute.String & Attribute.DefaultTo<'false'>;
+    image: Attribute.Text;
+    price: Attribute.Float & Attribute.DefaultTo<0>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

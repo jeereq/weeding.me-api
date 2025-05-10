@@ -60,10 +60,6 @@
     "nameInvitation": {
       "type": "string"
     },
-    "heart": {
-      "type": "boolean",
-      "default": true
-    },
     "initiateurDeLaDemande": {
       "type": "string"
     },
@@ -86,6 +82,21 @@
     },
     "time": {
       "type": "string"
+    },
+    "color": {
+      "type": "string",
+      "default": "black"
+    },
+    "heart": {
+      "type": "string",
+      "default": "false"
+    },
+    "image": {
+      "type": "text"
+    },
+    "price": {
+      "type": "float",
+      "default": 0
     }
   }
 }

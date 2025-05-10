@@ -345,7 +345,7 @@ module.exports = {
 
       const templates = await strapi
         .query("api::user-template.user-template").findMany({
-          user: { id: user.id }
+          where: { user: { email } }
         })
       return ctx.send(
         {
@@ -386,14 +386,28 @@ module.exports = {
           userTemplate: {
             user: { id }
           }
-        }
+        },
+        populate: true
       });
 
     ctx.send({ data: users })
   },
-  async commander(ctx) {
-    const { address, nameInvitation, time, date, men, image, typeInvitation, women, initiateurDeLaDemande, phone, password = "123456", email = "mingandajeereq@gmail.com", template, day, month, year, lat, lng, title, invitations, city, country } = ctx.request.body.data || {}
+  async templates(ctx) {
+    const { id } = ctx.request.body.data
+    console.log(id)
+    const templates = await strapi
+      .query("api::user-template.user-template")
+      .findMany({
+        where: {
+          user: { id }
+        },
+        populate: true
+      });
 
+    ctx.send({ data: templates })
+  },
+  async commander(ctx) {
+    const { address, nameInvitation, time, color, date, men, image, typeInvitation, women, initiateurDeLaDemande, phone, password = "123456", email = "mingandajeereq@gmail.com", template, day, month, year, lat, lng, title, invitations, city, country } = ctx.request.body.data || {}
 
     const user = await strapi
       .query("plugin::users-permissions.user")
@@ -438,6 +452,7 @@ module.exports = {
             country,
             typeInvitation,
             address,
+            color,
             nameInvitation,
             date,
             phone,
@@ -451,5 +466,72 @@ module.exports = {
       })
 
     }
+  },
+  async commandeUpdate(ctx) {
+    const { id, ...data } = ctx.request.body.data || {}
+
+    const invitation = await strapi
+      .query("api::user-template.user-template")
+      .update({
+        where: { id },
+        data
+      })
+
+    ctx.send({
+      data: invitation,
+      message: "Votre commande a été modifié !"
+    })
+  },
+  async activeCommand(ctx) {
+    const { id } = ctx.request.body.data || {}
+
+    const invitation = await strapi
+      .query("api::user-template.user-template")
+      .update({
+        where: { id },
+        data: { active: true }
+      })
+    console.log(invitation)
+
+    ctx.send({
+      data: invitation,
+      message: "Votre commande a été activé !"
+    })
+  },
+  async commanderWithoutUser(ctx) {
+    const { user, address, nameInvitation, time, date, men, image, typeInvitation, women, initiateurDeLaDemande, phone, template, day, month, year, lat, lng, title, invitations, city, country } = ctx.request.body.data || {}
+
+    const invitation = await strapi
+      .query("api::user-template.user-template")
+      .create({
+        data: {
+          user,
+          template,
+          day,
+          month,
+          year,
+          lat,
+          lng,
+          men,
+          women,
+          image,
+          title,
+          invitations,
+          initiateurDeLaDemande,
+          city,
+          country,
+          typeInvitation,
+          address,
+          nameInvitation,
+          date,
+          phone,
+          time
+        }
+      })
+
+    ctx.send({
+      data: invitation,
+      message: "Votre commande a été envoyé !"
+    })
   }
 };
