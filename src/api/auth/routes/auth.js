@@ -128,6 +128,24 @@ module.exports = {
     },
     {
       method: "POST",
+      path: "/auth/invitations/statEditor",
+      handler: "auth.statEditor", 
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "POST",
+      path: "/auth/invitations/statAdmin",
+      handler: "auth.statAdmin", 
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "POST",
       path: "/auth/invitations/commanderWithoutUser",
       handler: "auth.commanderWithoutUser",
       config: {

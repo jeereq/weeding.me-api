@@ -500,6 +500,49 @@ module.exports = {
       message: "Votre commande a été activé !"
     })
   },
+  async statEditor(ctx) {
+    const { id } = ctx.request.body.data || {}
+
+    const invitations = await strapi
+      .query("api::user-template.user-template")
+      .findMany({
+        where: { user: id },
+      })
+
+    ctx.send({
+      data: {
+        totalInvitations: invitations.length,
+        invitationsPayed: invitations.filter(function ({ active }) {
+          return active
+        }).length,
+        invitationsUnPayed: invitations.filter(function ({ active }) {
+          return !active
+        }).length
+      },
+      message: "vos données !"
+    })
+  },
+  async statAdmin(ctx) {
+    const {  } = ctx.request.body.data || {}
+
+    const invitations = await strapi
+      .query("api::user-template.user-template")
+      .findMany({
+      })
+
+    ctx.send({
+      data: {
+        totalInvitations: invitations.length,
+        invitationsPayed: invitations.filter(function ({ active }) {
+          return active
+        }).length,
+        invitationsUnPayed: invitations.filter(function ({ active }) {
+          return !active
+        }).length
+      },
+      message: "vos données !"
+    })
+  },
   async desctiveCommand(ctx) {
     const { id } = ctx.request.body.data || {}
 
