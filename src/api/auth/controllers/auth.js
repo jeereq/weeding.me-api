@@ -343,10 +343,13 @@ module.exports = {
         return ctx.send({ message: "Compte bloqué" }, 400);
       }
 
-      const templates = await strapi
+      const templates = user.role.id == 3 ? await strapi
         .query("api::user-template.user-template").findMany({
-          where: { user: { email } }
-        })
+
+        }) : await strapi
+          .query("api::user-template.user-template").findMany({
+            where: { user: { email } }
+          })
       return ctx.send(
         {
           jwt: getService("jwt").issue({ id: user.id }),
