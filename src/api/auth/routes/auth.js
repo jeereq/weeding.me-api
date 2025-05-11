@@ -101,6 +101,15 @@ module.exports = {
     },
     {
       method: "POST",
+      path: "/auth/invitations/desctiveCommand",
+      handler: "auth.desctiveCommand",
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "POST",
       path: "/auth/invitations/activeCommand",
       handler: "auth.activeCommand",
       config: {

@@ -491,7 +491,21 @@ module.exports = {
         where: { id },
         data: { active: true }
       })
-    console.log(invitation)
+
+    ctx.send({
+      data: invitation,
+      message: "Votre commande a été activé !"
+    })
+  },
+  async desctiveCommand(ctx) {
+    const { id } = ctx.request.body.data || {}
+
+    const invitation = await strapi
+      .query("api::user-template.user-template")
+      .update({
+        where: { id },
+        data: { active: false }
+      })
 
     ctx.send({
       data: invitation,
