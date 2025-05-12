@@ -567,7 +567,7 @@ module.exports = {
     const { userTemplate, ...rest } = ctx.request.body.data || {}
 
     const invitation = await strapi
-      .query("api::invitation.invitation")
+      .query("api::user-template.user-template")
       .findOne({ id: userTemplate, active: true })
     if (invitation) {
       const data = await strapi
