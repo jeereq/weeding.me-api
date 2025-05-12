@@ -66,13 +66,13 @@ module.exports = {
         .service("api::auth.auth")
         .createUser({ data: { confirmPassword: await generatePasswordHashed(confirmPassword), phone, password: await generatePasswordHashed(password) } });
 
-      if (user.message) return ctx.send(user, 404);
+      if (user?.message) return ctx.send(user, 404);
 
       const generatedCode = strapi
         .service("api::auth.auth")
         .generateCode(2);
 
-      if (user.phone) {
+      if (user?.phone) {
 
         user.resetPasswordToken = generatedCode;
         user.confirmed = true;
@@ -118,8 +118,8 @@ module.exports = {
           404
         );
 
-      user.confirmed = true;
-      user.resetPasswordToken = null;
+      user?.confirmed = true;
+      user?.resetPasswordToken = null;
 
       const data = user;
       const { id } = user;
@@ -168,26 +168,26 @@ module.exports = {
         .service("api::auth.auth")
         .generateCode(2);
 
-      if (user.phone) {
+      if (user?.phone) {
         const paramsMessage = {};
 
-        paramsMessage.message = `Bonjour ${user.username},
+        paramsMessage.message = `Bonjour ${user?.username},
          Nous avons reçu une demande de modification de votre mot de passe pour votre compte BUKU.
          Pour confirmer que vous êtes bien à l'origine de cette demande, veuillez saisir le code suivant dans l'interface de modification du mot de passe : ${generatedCode}
          Si vous n'avez pas demandé cette modification, veuillez ignorer ce message.
          Si vous avez des questions, n'hésitez pas à nous contacter.`;
 
-        paramsMessage.recipient = user.phone;
+        paramsMessage.recipient = user?.phone;
 
         const sendSMS = await strapi
           .service("api::sms.sms")
           .sendSms(paramsMessage);
 
         if (sendSMS) {
-          user.resetPasswordToken = generatedCode;
-          user.receiptedSMS = true;
+          user?.resetPasswordToken = generatedCode;
+          user?.receiptedSMS = true;
         } else {
-          user.receiptedSMS = false;
+          user?.receiptedSMS = false;
         }
 
         console.log("ICI", generatedCode);
@@ -199,7 +199,7 @@ module.exports = {
           .update({ data, where: { id } });
       }
 
-      user.resetPasswordToken = generatedCode;
+      user?.resetPasswordToken = generatedCode;
 
       const data = user;
       const { id } = user;
@@ -252,10 +252,10 @@ module.exports = {
           404
         );
 
-      user.password = await generatePasswordHashed(password);
-      user.confirmed = true;
-      user.confirmPassword = await generatePasswordHashed(password);;
-      user.resetPasswordToken = null;
+      user?.password = await generatePasswordHashed(password);
+      user?.confirmed = true;
+      user?.confirmPassword = await generatePasswordHashed(password);;
+      user?.resetPasswordToken = null;
 
       const data = user;
       const { id } = user;
@@ -263,24 +263,24 @@ module.exports = {
         .query("plugin::users-permissions.user")
         .update({ data, where: { id } });
 
-      if (user.phone) {
+      if (user?.phone) {
         const paramsMessage = {};
-        paramsMessage.message = `Bonjour ${user.username},
+        paramsMessage.message = `Bonjour ${user?.username},
           Nous vous confirmons que votre mot de passe pour votre compte ${ENTITY} a été modifié avec succès.
           Votre nouveau mot de passe est : ${password}
           Veuillez noter que ce mot de passe est désormais votre mot de passe principal pour ce compte.
           Si vous avez des questions, n'hésitez pas à nous contacter.
           Cordialement,
           ${ENTITY}`;
-        paramsMessage.recipient = user.phone;
+        paramsMessage.recipient = user?.phone;
         const sendSMS = await strapi
           .service("api::sms.sms")
           .sendSms(paramsMessage);
 
         if (sendSMS) {
-          user.receiptedSMS = true;
+          user?.receiptedSMS = true;
         } else {
-          user.receiptedSMS = false;
+          user?.receiptedSMS = false;
         }
         const data = user;
         const { id } = user;
@@ -328,22 +328,22 @@ module.exports = {
         );
       }
 
-      if (!await validatePassword(password, user.password)) {
+      if (!await validatePassword(password, user?.password)) {
         return ctx.send(
           { message: "Mot de passe incorrecte" },
           400
         );
       }
 
-      if (!user.confirmed) {
+      if (!user?.confirmed) {
         return ctx.send({ message: "Compte non confirmé" }, 400);
       }
 
-      if (user.blocked) {
+      if (user?.blocked) {
         return ctx.send({ message: "Compte bloqué" }, 400);
       }
 
-      let templates = user.role.id == 3 ? await strapi
+      let templates = user?.role.id == 3 ? await strapi
         .query("api::user-template.user-template").findMany({}) : await strapi
           .query("api::user-template.user-template").findMany({
             where: { user: { email } }
@@ -359,7 +359,7 @@ module.exports = {
       }
       return ctx.send(
         {
-          jwt: getService("jwt").issue({ id: user.id }),
+          jwt: getService("jwt").issue({ id: user?.id }),
           data: {
             ...await sanitizeUser(user, ctx),
             templates,
