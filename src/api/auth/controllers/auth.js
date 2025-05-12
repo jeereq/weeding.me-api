@@ -118,8 +118,8 @@ module.exports = {
           404
         );
 
-      user?.confirmed = true;
-      user?.resetPasswordToken = null;
+      user.confirmed = true;
+      user.resetPasswordToken = null;
 
       const data = user;
       const { id } = user;
@@ -184,10 +184,10 @@ module.exports = {
           .sendSms(paramsMessage);
 
         if (sendSMS) {
-          user?.resetPasswordToken = generatedCode;
-          user?.receiptedSMS = true;
+          user.resetPasswordToken = generatedCode;
+          user.receiptedSMS = true;
         } else {
-          user?.receiptedSMS = false;
+          user.receiptedSMS = false;
         }
 
         console.log("ICI", generatedCode);
@@ -199,7 +199,7 @@ module.exports = {
           .update({ data, where: { id } });
       }
 
-      user?.resetPasswordToken = generatedCode;
+      user.resetPasswordToken = generatedCode;
 
       const data = user;
       const { id } = user;
@@ -252,10 +252,10 @@ module.exports = {
           404
         );
 
-      user?.password = await generatePasswordHashed(password);
-      user?.confirmed = true;
-      user?.confirmPassword = await generatePasswordHashed(password);;
-      user?.resetPasswordToken = null;
+      user.password = await generatePasswordHashed(password);
+      user.confirmed = true;
+      user.confirmPassword = await generatePasswordHashed(password);;
+      user.resetPasswordToken = null;
 
       const data = user;
       const { id } = user;
@@ -278,9 +278,9 @@ module.exports = {
           .sendSms(paramsMessage);
 
         if (sendSMS) {
-          user?.receiptedSMS = true;
+          user.receiptedSMS = true;
         } else {
-          user?.receiptedSMS = false;
+          user.receiptedSMS = false;
         }
         const data = user;
         const { id } = user;
