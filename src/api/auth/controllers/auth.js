@@ -343,13 +343,20 @@ module.exports = {
         return ctx.send({ message: "Compte bloqué" }, 400);
       }
 
-      const templates = user.role.id == 3 ? await strapi
-        .query("api::user-template.user-template").findMany({
-
-        }) : await strapi
+      let templates = user.role.id == 3 ? await strapi
+        .query("api::user-template.user-template").findMany({}) : await strapi
           .query("api::user-template.user-template").findMany({
             where: { user: { email } }
           })
+      for (let index = 0; index < templates.length; index++) {
+        const { id } = templates[index];
+        const guests = await strapi
+          .query("api::invitation.invitation").findMany({
+            where: { userTemplate: { id } },
+            populate: true
+          })
+        templates[index]["guests"] = guests
+      }
       return ctx.send(
         {
           jwt: getService("jwt").issue({ id: user.id }),
@@ -382,18 +389,32 @@ module.exports = {
   },
   async invitations(ctx) {
     const { id } = ctx.request.body.data || {}
-    const users = await strapi
+    const invitations = await strapi
       .query("api::invitation.invitation")
       .findMany({
         where: {
           userTemplate: {
-            user: { id }
+            user: { id },
+            active: true
           }
         },
         populate: true
       });
 
-    ctx.send({ data: users })
+    ctx.send({ data: invitations })
+  },
+  async invitationPublic(ctx) {
+    const { id } = ctx.request.body.data || {}
+    const invitation = await strapi
+      .query("api::invitation.invitation")
+      .findOne({
+        where: {
+          id
+        },
+        populate: true
+      });
+
+    ctx.send({ data: invitation })
   },
   async templates(ctx) {
     const { id } = ctx.request.body.data
@@ -488,7 +509,7 @@ module.exports = {
   async activeCommand(ctx) {
     const { id } = ctx.request.body.data || {}
 
-    const invitation = await strapi
+    const userTemplate = await strapi
       .query("api::user-template.user-template")
       .update({
         where: { id },
@@ -496,7 +517,7 @@ module.exports = {
       })
 
     ctx.send({
-      data: invitation,
+      data: userTemplate,
       message: "Votre commande a été activé !"
     })
   },
@@ -523,12 +544,11 @@ module.exports = {
     })
   },
   async statAdmin(ctx) {
-    const {  } = ctx.request.body.data || {}
+    const { } = ctx.request.body.data || {}
 
     const invitations = await strapi
       .query("api::user-template.user-template")
-      .findMany({
-      })
+      .findMany({})
 
     ctx.send({
       data: {
@@ -543,10 +563,31 @@ module.exports = {
       message: "vos données !"
     })
   },
+  async createInvitation(ctx) {
+    const { userTemplate, ...rest } = ctx.request.body.data || {}
+
+    const invitation = await strapi
+      .query("api::invitation.invitation")
+      .findOne({ id: userTemplate, active: true })
+    if (invitation) {
+      const data = await strapi
+        .query("api::invitation.invitation")
+        .create({ data: { userTemplate, ...rest }, populate: true })
+      ctx.send({
+        data,
+        message: "Vous avez créé un invité !"
+      })
+    } else {
+      ctx.send({
+        data: null,
+        message: "Invitations pas encore activé ou non présente sur la plaetforme !"
+      })
+    }
+  },
   async desctiveCommand(ctx) {
     const { id } = ctx.request.body.data || {}
 
-    const invitation = await strapi
+    const userTemplate = await strapi
       .query("api::user-template.user-template")
       .update({
         where: { id },
@@ -554,7 +595,7 @@ module.exports = {
       })
 
     ctx.send({
-      data: invitation,
+      data: userTemplate,
       message: "Votre commande a été activé !"
     })
   },

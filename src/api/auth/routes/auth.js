@@ -92,6 +92,15 @@ module.exports = {
     },
     {
       method: "POST",
+      path: "/auth/users/invitationPublic",
+      handler: "auth.invitationPublic",
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "POST",
       path: "/auth/invitations/command",
       handler: "auth.commander",
       config: {
@@ -118,7 +127,7 @@ module.exports = {
       },
     },
     {
-      method: "POST",
+      method: "POST",   
       path: "/auth/invitations/commandeUpdate",
       handler: "auth.commandeUpdate", 
       config: {
@@ -139,6 +148,15 @@ module.exports = {
       method: "POST",
       path: "/auth/invitations/statAdmin",
       handler: "auth.statAdmin", 
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "POST",
+      path: "/auth/invitations/create",
+      handler: "auth.createInvitation", 
       config: {
         policies: [],
         middlewares: [],

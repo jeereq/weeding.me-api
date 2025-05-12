@@ -23,14 +23,6 @@
     "email": {
       "type": "email"
     },
-    "messageSend": {
-      "type": "boolean",
-      "default": true
-    },
-    "messageRead": {
-      "type": "boolean",
-      "default": true
-    },
     "name": {
       "type": "string"
     },
@@ -38,8 +30,25 @@
       "type": "enumeration",
       "enum": [
         "couple",
-        "celibataire"
+        "singel",
+        "family",
+        "company",
+        "group"
       ]
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "attending",
+        "pending",
+        "declined"
+      ]
+    },
+    "approvedAt": {
+      "type": "datetime"
+    },
+    "members": {
+      "type": "json"
     }
   }
 }

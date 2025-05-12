@@ -381,10 +381,13 @@ export interface ApiInvitationInvitation extends Schema.CollectionType {
     >;
     phone: Attribute.String;
     email: Attribute.Email;
-    messageSend: Attribute.Boolean & Attribute.DefaultTo<true>;
-    messageRead: Attribute.Boolean & Attribute.DefaultTo<true>;
     name: Attribute.String;
-    type: Attribute.Enumeration<['couple', 'celibataire']>;
+    type: Attribute.Enumeration<
+      ['couple', 'singel', 'family', 'company', 'group']
+    >;
+    status: Attribute.Enumeration<['attending', 'pending', 'declined']>;
+    approvedAt: Attribute.DateTime;
+    members: Attribute.JSON;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
