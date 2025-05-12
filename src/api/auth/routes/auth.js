@@ -74,6 +74,15 @@ module.exports = {
     },
     {
       method: "POST",
+      path: "/auth/users/templates",
+      handler: "auth.templates",
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "POST",
       path: "/auth/users/invitations",
       handler: "auth.invitations",
       config: {
@@ -83,8 +92,80 @@ module.exports = {
     },
     {
       method: "POST",
+      path: "/auth/users/invitationPublic",
+      handler: "auth.invitationPublic",
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "POST",
       path: "/auth/invitations/command",
       handler: "auth.commander",
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "POST",
+      path: "/auth/invitations/desctiveCommand",
+      handler: "auth.desctiveCommand",
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "POST",
+      path: "/auth/invitations/activeCommand",
+      handler: "auth.activeCommand",
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "POST",   
+      path: "/auth/invitations/commandeUpdate",
+      handler: "auth.commandeUpdate", 
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "POST",
+      path: "/auth/invitations/statEditor",
+      handler: "auth.statEditor", 
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "POST",
+      path: "/auth/invitations/statAdmin",
+      handler: "auth.statAdmin", 
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "POST",
+      path: "/auth/invitations/create",
+      handler: "auth.createInvitation", 
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "POST",
+      path: "/auth/invitations/commanderWithoutUser",
+      handler: "auth.commanderWithoutUser",
       config: {
         policies: [],
         middlewares: [],

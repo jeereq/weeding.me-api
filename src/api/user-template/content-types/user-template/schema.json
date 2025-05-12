@@ -32,9 +32,6 @@
     "date": {
       "type": "date"
     },
-    "time": {
-      "type": "time"
-    },
     "address": {
       "type": "string"
     },
@@ -57,15 +54,11 @@
       "type": "enumeration",
       "enum": [
         "couple",
-        "celibataire"
+        "singel"
       ]
     },
     "nameInvitation": {
       "type": "string"
-    },
-    "heart": {
-      "type": "boolean",
-      "default": true
     },
     "initiateurDeLaDemande": {
       "type": "string"
@@ -86,6 +79,24 @@
     "active": {
       "type": "boolean",
       "default": false
+    },
+    "time": {
+      "type": "string"
+    },
+    "color": {
+      "type": "string",
+      "default": "black"
+    },
+    "heart": {
+      "type": "string",
+      "default": "false"
+    },
+    "image": {
+      "type": "text"
+    },
+    "price": {
+      "type": "float",
+      "default": 0
     }
   }
 }

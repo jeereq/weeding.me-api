@@ -381,10 +381,13 @@ export interface ApiInvitationInvitation extends Schema.CollectionType {
     >;
     phone: Attribute.String;
     email: Attribute.Email;
-    messageSend: Attribute.Boolean & Attribute.DefaultTo<true>;
-    messageRead: Attribute.Boolean & Attribute.DefaultTo<true>;
     name: Attribute.String;
-    type: Attribute.Enumeration<['couple', 'celibataire']>;
+    type: Attribute.Enumeration<
+      ['couple', 'singel', 'family', 'company', 'group']
+    >;
+    status: Attribute.Enumeration<['attending', 'pending', 'declined']>;
+    approvedAt: Attribute.DateTime;
+    members: Attribute.JSON;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -424,22 +427,25 @@ export interface ApiUserTemplateUserTemplate extends Schema.CollectionType {
     month: Attribute.String;
     year: Attribute.String;
     date: Attribute.Date;
-    time: Attribute.Time;
     address: Attribute.String;
     lat: Attribute.String;
     lng: Attribute.String;
     title: Attribute.String;
     men: Attribute.String;
     women: Attribute.String;
-    typeInvitation: Attribute.Enumeration<['couple', 'celibataire']>;
+    typeInvitation: Attribute.Enumeration<['couple', 'singel']>;
     nameInvitation: Attribute.String;
-    heart: Attribute.Boolean & Attribute.DefaultTo<true>;
     initiateurDeLaDemande: Attribute.String;
     phone: Attribute.String;
     invitations: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
     city: Attribute.String;
     country: Attribute.String;
     active: Attribute.Boolean & Attribute.DefaultTo<false>;
+    time: Attribute.String;
+    color: Attribute.String & Attribute.DefaultTo<'black'>;
+    heart: Attribute.String & Attribute.DefaultTo<'false'>;
+    image: Attribute.Text;
+    price: Attribute.Float & Attribute.DefaultTo<0>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
