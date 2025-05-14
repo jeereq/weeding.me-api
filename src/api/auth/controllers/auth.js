@@ -587,11 +587,11 @@ module.exports = {
   async deleteInvitation(ctx) {
     const { id } = ctx.request.body.data || {}
 
-    const invitation = await strapi
+    await strapi
       .query("api::user-template.user-template")
       .delete({ where: { id } })
     ctx.send({
-      data: invitation,
+      data: {},
       message: "Invitation supprimer !"
     })
   },
