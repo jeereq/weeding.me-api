@@ -164,6 +164,15 @@ module.exports = {
     },
     {
       method: "POST",
+      path: "/auth/invitations/delete",
+      handler: "auth.deleteInvitation", 
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "POST",
       path: "/auth/invitations/commanderWithoutUser",
       handler: "auth.commanderWithoutUser",
       config: {

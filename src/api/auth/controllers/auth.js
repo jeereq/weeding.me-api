@@ -568,7 +568,7 @@ module.exports = {
 
     const invitation = await strapi
       .query("api::user-template.user-template")
-      .findOne({ id: userTemplate, active: true })
+      .findOne({ where: { id: userTemplate, active: true } })
     if (invitation) {
       const data = await strapi
         .query("api::invitation.invitation")
@@ -583,6 +583,17 @@ module.exports = {
         message: "Invitations pas encore activé ou non présente sur la plaetforme !"
       })
     }
+  },
+  async deleteInvitation(ctx) {
+    const { id } = ctx.request.body.data || {}
+
+    const invitation = await strapi
+      .query("api::user-template.user-template")
+      .delete({ where: { id } })
+    ctx.send({
+      data: invitation,
+      message: "Invitation supprimer !"
+    })
   },
   async desctiveCommand(ctx) {
     const { id } = ctx.request.body.data || {}
