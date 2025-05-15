@@ -527,16 +527,16 @@ module.exports = {
         "1": `${civility} ${name}`,
         "2": "13/02/2026",
         "3": "limete 15 eme rue",
-        "4": guest.id,
-        "5": guest.id
+        "4": `${guest.id}?confirm=true`,
+        "5": `${guest.id}?confirm=false`
       }
 
       client.messages
         .create({
           from: `whatsapp:${twilioPhoneNumber}`,
           contentSid: 'HX484513e6cd747182415f2585a61ff76b',
-          contentVariables: JSON.stringify(variables),
-          to: 'whatsapp:++243826526973'
+          contentVariables: `${JSON.stringify(variables)}`,
+          to: 'whatsapp:+243817125577'
         })
         .then((message) => {
           console.log(message.sid, message)
