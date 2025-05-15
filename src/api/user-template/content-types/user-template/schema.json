@@ -99,7 +99,8 @@
       "default": 0
     },
     "invitationsUser": {
-      "type": "biginteger"
+      "type": "biginteger",
+      "default": "0"
     }
   }
 }

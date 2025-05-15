@@ -641,8 +641,9 @@ module.exports = {
               .query("api::user-template.user-template")
               .update({
                 where: { id: invitation.id }, data: {
-                  invitationsUser: invitation.invitationsUser + 1
-                }, populate: true
+                  invitationsUser: +invitation.invitationsUser + 1
+                },
+                populate: true
               })
             return response
           })
@@ -655,7 +656,7 @@ module.exports = {
 
         ctx.send({
           data: null,
-          message: "Invitations pas encore activé ou non présente sur la plateforme !"
+          message: "Vous avez Dépasser le quota d'invitation acheter !"
         })
       }
     } else {
