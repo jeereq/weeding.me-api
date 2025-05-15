@@ -641,10 +641,10 @@ module.exports = {
               strapi
                 .query("api::user-template.user-template")
                 .update({
-                  where: { id: invitation.id }, data: {
+                  where: { id: userTemplate },
+                  data: {
                     invitationsUser: parseFloat(invitation.invitationsUser) + 1
-                  },
-                  populate: true
+                  }
                 })
               return response
             })
