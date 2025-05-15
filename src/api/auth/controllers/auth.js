@@ -643,7 +643,7 @@ module.exports = {
                 .update({
                   where: { id: userTemplate },
                   data: {
-                    invitationsUser: parseFloat(invitation.invitationsUser) + 1
+                    invitationsUser: parseFloat(`${parseFloat(invitation.invitationsUser) + 1}`)
                   }
                 })
               return response
