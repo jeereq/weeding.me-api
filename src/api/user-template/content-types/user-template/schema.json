@@ -97,6 +97,9 @@
     "price": {
       "type": "float",
       "default": 0
+    },
+    "invitationsUser": {
+      "type": "biginteger"
     }
   }
 }

@@ -633,17 +633,35 @@ module.exports = {
       .query("api::user-template.user-template")
       .findOne({ where: { id: userTemplate, active: true } })
     if (invitation) {
-      const data = await strapi
-        .query("api::invitation.invitation")
-        .create({ data: { userTemplate, ...rest }, populate: true })
-      ctx.send({
-        data,
-        message: "Vous avez créé un invité !"
-      })
+      if (invitation.invitations > invitation.invitationsUser) {
+        const data = await strapi
+          .query("api::invitation.invitation")
+          .create({ data: { userTemplate, ...rest }, populate: true }).then(function (response) {
+            strapi
+              .query("api::user-template.user-template")
+              .update({
+                where: { id: invitation.id }, data: {
+                  invitationsUser: invitation.invitationsUser + 1
+                }, populate: true
+              })
+            return response
+          })
+
+        ctx.send({
+          data,
+          message: "Vous avez créé un invité !"
+        })
+      } else {
+
+        ctx.send({
+          data: null,
+          message: "Invitations pas encore activé ou non présente sur la plateforme !"
+        })
+      }
     } else {
       ctx.send({
         data: null,
-        message: "Invitations pas encore activé ou non présente sur la plaetforme !"
+        message: "Invitations pas encore activé ou non présente sur la plateforme !"
       })
     }
   },
