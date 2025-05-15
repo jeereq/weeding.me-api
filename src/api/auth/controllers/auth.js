@@ -359,7 +359,7 @@ module.exports = {
       }
       return ctx.send(
         {
-          jwt: getService("jwt").issue({ id: user?.id }),
+          jwt: getService("jwt").issue({ id: user?.id, role: user.role }),
           data: {
             ...await sanitizeUser(user, ctx),
             templates,
@@ -372,7 +372,7 @@ module.exports = {
       return ctx.send({ message: "Quelque chose a mal tourné." }, 500);
     }
   },
-  async loginEmail(ctx) {
+  async loginByEmail(ctx) {
     try {
       const { email } = ctx.request.body.data;
 
@@ -422,7 +422,7 @@ module.exports = {
       }
       return ctx.send(
         {
-          jwt: getService("jwt").issue({ id: user?.id }),
+          jwt: getService("jwt").issue({ id: user?.id, role: user.role }),
           data: {
             ...await sanitizeUser(user, ctx),
             templates,
