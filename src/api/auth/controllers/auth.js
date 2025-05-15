@@ -658,6 +658,17 @@ module.exports = {
       message: "Invitation supprimer !"
     })
   },
+  async deleteInvite(ctx) {
+    const { id } = ctx.request.body.data || {}
+
+    await strapi
+      .query("api::invitation.invitation")
+      .delete({ where: { id } })
+    ctx.send({
+      data: {},
+      message: "Invité supprimer !"
+    })
+  },
   async desctiveCommand(ctx) {
     const { id } = ctx.request.body.data || {}
 
