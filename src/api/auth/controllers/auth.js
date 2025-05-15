@@ -9,7 +9,6 @@ const twilioPhoneNumber = '+16167370410'
 const client = require('twilio')(accountSid, authToken);
 const { sanitize } = utils;
 
-
 // 'family' | 'company' | 'group' | 'singel' | 'couple';
 
 const getCivility = (type) => {
