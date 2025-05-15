@@ -535,12 +535,12 @@ module.exports = {
           from: `whatsapp:${twilioPhoneNumber}`,
           contentSid: 'HX484513e6cd747182415f2585a61ff76b',
           contentVariables: `${JSON.stringify(variables)}`,
-          to: 'whatsapp:+243817125577'
+          to: 'whatsapp:+243817049366'
         })
         .then((message) => {
           console.log(message.sid, message)
         }).catch(function (error) {
-          console.log(JSON.stringify(variables), variables, error)
+          console.log(`${JSON.stringify(variables)}`, variables, error)
         })
     }
 
