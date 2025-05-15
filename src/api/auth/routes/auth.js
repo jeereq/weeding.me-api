@@ -65,6 +65,15 @@ module.exports = {
     },
     {
       method: "POST",
+      path: "/auth/loginByEmail",
+      handler: "auth.loginByEmail",
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "POST",
       path: "/auth/users",
       handler: "auth.users",
       config: {

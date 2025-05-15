@@ -372,6 +372,69 @@ module.exports = {
       return ctx.send({ message: "Quelque chose a mal tourné." }, 500);
     }
   },
+  async loginEmail(ctx) {
+    try {
+      const { email } = ctx.request.body.data;
+
+      const isEmail = await strapi
+        .service("api::auth.auth")
+        .paramsExist(email);
+
+      if (!isEmail) {
+        return ctx.send(
+          { message: "Les champs obligatoires sont vides" },
+          400
+        );
+      }
+
+      const user = await strapi
+        .query("plugin::users-permissions.user")
+        .update({ where: { email }, data: { lastLogin: new Date() }, populate: true });
+
+      if (!user) {
+        return ctx.send(
+          { message: "Utilisateur non présent sur la plateforme" },
+          404
+        );
+      }
+
+      if (!user?.confirmed) {
+        return ctx.send({ message: "Compte non confirmé" }, 400);
+      }
+
+      if (user?.blocked) {
+        return ctx.send({ message: "Compte bloqué" }, 400);
+      }
+
+      let templates = user?.role.id == 3 ? await strapi
+        .query("api::user-template.user-template").findMany({}) : await strapi
+          .query("api::user-template.user-template").findMany({
+            where: { user: { email } }
+          })
+      for (let index = 0; index < templates.length; index++) {
+        const { id } = templates[index];
+        const guests = await strapi
+          .query("api::invitation.invitation").findMany({
+            where: { userTemplate: { id } },
+            populate: true
+          })
+        templates[index]["guests"] = guests
+      }
+      return ctx.send(
+        {
+          jwt: getService("jwt").issue({ id: user?.id }),
+          data: {
+            ...await sanitizeUser(user, ctx),
+            templates,
+            guests: []
+          }
+        },
+        200
+      );
+    } catch (error) {
+      return ctx.send({ message: "Quelque chose a mal tourné." }, 500);
+    }
+  },
   async updateUser(ctx) {
     const { id, ...data } = ctx.request.body.data;
     const user = await strapi
