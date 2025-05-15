@@ -39,10 +39,12 @@
     "status": {
       "type": "enumeration",
       "enum": [
+        "noStarted",
         "attending",
         "pending",
         "declined"
-      ]
+      ],
+      "default": "noStarted"
     },
     "approvedAt": {
       "type": "datetime"
