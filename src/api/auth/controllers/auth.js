@@ -629,40 +629,48 @@ module.exports = {
   async createInvitation(ctx) {
     const { userTemplate, ...rest } = ctx.request.body.data || {}
 
-    const invitation = await strapi
-      .query("api::user-template.user-template")
-      .findOne({ where: { id: userTemplate, active: true } })
-    if (invitation) {
-      if (invitation.invitations > invitation.invitationsUser) {
-        const data = await strapi
-          .query("api::invitation.invitation")
-          .create({ data: { userTemplate, ...rest }, populate: true }).then(function (response) {
-            strapi
-              .query("api::user-template.user-template")
-              .update({
-                where: { id: invitation.id }, data: {
-                  invitationsUser: invitation.invitationsUser + 1
-                },
-                populate: true
-              })
-            return response
+    try {
+      const invitation = await strapi
+        .query("api::user-template.user-template")
+        .findOne({ where: { id: userTemplate, active: true } })
+      if (invitation) {
+        if (invitation.invitations > invitation.invitationsUser) {
+          const data = await strapi
+            .query("api::invitation.invitation")
+            .create({ data: { userTemplate, ...rest }, populate: true }).then(function (response) {
+              strapi
+                .query("api::user-template.user-template")
+                .update({
+                  where: { id: invitation.id }, data: {
+                    invitationsUser: invitation.invitationsUser + 1
+                  },
+                  populate: true
+                })
+              return response
+            })
+
+          ctx.send({
+            data,
+            message: "Vous avez créé un invité !"
           })
+        } else {
 
-        ctx.send({
-          data,
-          message: "Vous avez créé un invité !"
-        })
+          ctx.send({
+            data: null,
+            message: "Vous avez Dépassé le quota d'invitation acheter !"
+          })
+        }
       } else {
-
         ctx.send({
           data: null,
-          message: "Vous avez Dépasser le quota d'invitation acheter !"
+          message: "Invitations pas encore activé ou non présente sur la plateforme !"
         })
       }
-    } else {
+    } catch (error) {
+      console.log(error)
       ctx.send({
         data: null,
-        message: "Invitations pas encore activé ou non présente sur la plateforme !"
+        message: "Quelque chose s'est mal passé !"
       })
     }
   },
