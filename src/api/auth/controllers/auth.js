@@ -634,10 +634,11 @@ module.exports = {
         .query("api::user-template.user-template")
         .findOne({ where: { id: userTemplate, active: true } })
       if (invitation) {
-        if (parseFloat(invitation.invitations) > parseFloat(invitation.invitationsUser)) {
+        if (parseFloat(`${invitation.invitations}`) > parseFloat(`${invitation.invitationsUser}`)) {
           const data = await strapi
             .query("api::invitation.invitation")
-            .create({ data: { userTemplate, ...rest }, populate: true }).then(function (response) {
+            .create({ data: { userTemplate, ...rest }, populate: true })
+            .then(function (response) {
               strapi
                 .query("api::user-template.user-template")
                 .update({
