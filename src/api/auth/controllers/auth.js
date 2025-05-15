@@ -642,7 +642,7 @@ module.exports = {
                 .query("api::user-template.user-template")
                 .update({
                   where: { id: invitation.id }, data: {
-                    invitationsUser: invitation.invitationsUser + 1
+                    invitationsUser: +invitation.invitationsUser + 1
                   },
                   populate: true
                 })
