@@ -524,11 +524,11 @@ module.exports = {
       const civility = getCivility(guest?.type)
 
       const variables = {
-        1: `${civility} ${name}`,
-        2: "13/02/2026",
-        3: "limete 15 eme rue",
-        4: guest.id,
-        5: guest.id
+        "1": `${civility} ${name}`,
+        "2": "13/02/2026",
+        "3": "limete 15 eme rue",
+        "4": guest.id,
+        "5": guest.id
       }
 
       client.messages
@@ -538,8 +538,10 @@ module.exports = {
           contentVariables: JSON.stringify(variables),
           to: 'whatsapp:++243826526973'
         })
-        .then(message => {
+        .then((message) => {
           console.log(message.sid, message)
+        }).catch(function (error) {
+          console.log(JSON.stringify(variables), variables, error)
         })
     }
 
