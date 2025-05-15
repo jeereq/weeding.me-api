@@ -634,7 +634,7 @@ module.exports = {
         .query("api::user-template.user-template")
         .findOne({ where: { id: userTemplate, active: true } })
       if (invitation) {
-        if (invitation.invitations > invitation.invitationsUser) {
+        if (parseFloat(invitation.invitations) > parseFloat(invitation.invitationsUser)) {
           const data = await strapi
             .query("api::invitation.invitation")
             .create({ data: { userTemplate, ...rest }, populate: true }).then(function (response) {
@@ -642,7 +642,7 @@ module.exports = {
                 .query("api::user-template.user-template")
                 .update({
                   where: { id: invitation.id }, data: {
-                    invitationsUser: +invitation.invitationsUser + 1
+                    invitationsUser: parseFloat(invitation.invitationsUser) + 1
                   },
                   populate: true
                 })
