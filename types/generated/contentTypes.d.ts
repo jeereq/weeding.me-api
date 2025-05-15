@@ -385,7 +385,10 @@ export interface ApiInvitationInvitation extends Schema.CollectionType {
     type: Attribute.Enumeration<
       ['couple', 'singel', 'family', 'company', 'group']
     >;
-    status: Attribute.Enumeration<['attending', 'pending', 'declined']>;
+    status: Attribute.Enumeration<
+      ['noStarted', 'attending', 'pending', 'declined']
+    > &
+      Attribute.DefaultTo<'noStarted'>;
     approvedAt: Attribute.DateTime;
     members: Attribute.JSON;
     createdAt: Attribute.DateTime;
