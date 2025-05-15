@@ -3,7 +3,32 @@ const utils = require("@strapi/utils");
 const { getService } = require("../utils");
 const bcrypt = require("bcryptjs");
 
+const accountSid = 'ACcdda37788c4e6ae0892304586bc60d2c'
+const authToken = '093036eba9247d9512bf914ae57d0617'
+const twilioPhoneNumber = '+16167370410'
+const client = require('twilio')(accountSid, authToken);
 const { sanitize } = utils;
+
+
+// 'family' | 'company' | 'group' | 'singel' | 'couple';
+
+const getCivility = (type) => {
+  switch (type) {
+    case "family":
+      return "Monsieur(Madame)"
+    case "company":
+      return "Monsieur(Madame)"
+    case "couple":
+      return "Monsieur(Madame)"
+    case "group":
+      return "Monsieur(Madame)"
+    case "singel":
+      return "Monsieur(Madame)"
+
+    default:
+      break;
+  }
+}
 
 const generatePasswordHashed = async (password) => {
   return await bcrypt.genSalt(10).then(async function (salt) {
@@ -478,6 +503,47 @@ module.exports = {
       });
 
     ctx.send({ data: invitation })
+  },
+  async createMessage(ctx) {
+    const { userTemplate } = ctx.request.body.data || {}
+    const invitations = await strapi
+      .query("api::invitation.invitation")
+      .findMany({
+        where: {
+          userTemplate: { id: userTemplate }
+        }
+      });
+
+    for (let index = 0; index < invitations.length; index++) {
+      const guest = invitations[index];
+
+      const name = guest.type != "singel" ? guest?.members?.map(function ({ name }) {
+        return name
+      }).join(" & ") : guest.name
+
+      const civility = getCivility(guest?.type)
+
+      const variables = {
+        1: `${civility} ${name}`,
+        2: "13/02/2026",
+        3: "limete 15 eme rue",
+        4: guest.id,
+        5: guest.id
+      }
+
+      client.messages
+        .create({
+          from: `whatsapp:${twilioPhoneNumber}`,
+          contentSid: 'HX484513e6cd747182415f2585a61ff76b',
+          contentVariables: JSON.stringify(variables),
+          to: 'whatsapp:++243826526973'
+        })
+        .then(message => {
+          console.log(message.sid, message)
+        })
+    }
+
+    ctx.send({ data: invitations })
   },
   async templates(ctx) {
     const { id } = ctx.request.body.data
