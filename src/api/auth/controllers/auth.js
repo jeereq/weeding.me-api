@@ -6,10 +6,10 @@ const bcrypt = require("bcryptjs");
 const accountSid = process.env.TWILIO_ACCOUNT_SID
 const authToken = process.env.TWILIO_AUTH_TOKEN
 const twilioPhoneNumber = process.env.TWILIONUM
-const client = require('twilio')(accountSid, authToken);
-const { sanitize } = utils;
 
-// 'family' | 'company' | 'group' | 'singel' | 'couple';
+const client = require('twilio')(accountSid, authToken);
+
+const { sanitize } = utils;
 
 const getCivility = (type) => {
   switch (type) {
