@@ -1,9 +1,34 @@
 "use strict";
+
 const utils = require("@strapi/utils");
 const { getService } = require("../utils");
 const bcrypt = require("bcryptjs");
 
+const accountSid = process.env.TWILIO_ACCOUNT_SID
+const authToken = process.env.TWILIO_AUTH_TOKEN
+const twilioPhoneNumber = process.env.TWILIONUM
+
+const client = require('twilio')(accountSid, authToken);
+
 const { sanitize } = utils;
+
+const getCivility = (type) => {
+  switch (type) {
+    case "family":
+      return "Monsieur(Madame)"
+    case "company":
+      return "Monsieur(Madame)"
+    case "couple":
+      return "Monsieur(Madame)"
+    case "group":
+      return "Monsieur(Madame)"
+    case "singel":
+      return "Monsieur(Madame)"
+
+    default:
+      break;
+  }
+}
 
 const generatePasswordHashed = async (password) => {
   return await bcrypt.genSalt(10).then(async function (salt) {
@@ -406,11 +431,12 @@ module.exports = {
         return ctx.send({ message: "Compte bloqué" }, 400);
       }
 
-      let templates = user?.role.id == 3 ? await strapi
-        .query("api::user-template.user-template").findMany({}) : await strapi
+      let templates = (user?.role?.id == 3) ? await strapi
+        .query("api::user-template.user-template").findMany({}) :
+        await strapi
           .query("api::user-template.user-template").findMany({
             where: { user: { email } }
-          })
+          });
       for (let index = 0; index < templates.length; index++) {
         const { id } = templates[index];
         const guests = await strapi
@@ -478,6 +504,49 @@ module.exports = {
       });
 
     ctx.send({ data: invitation })
+  },
+  async createMessage(ctx) {
+    const { userTemplate } = ctx.request.body.data || {}
+    const invitations = await strapi
+      .query("api::invitation.invitation")
+      .findMany({
+        where: {
+          userTemplate: { id: userTemplate }
+        }
+      });
+
+    for (let index = 0; index < 1; index++) {
+      const guest = invitations[index];
+
+      const name = guest.type != "singel" ? guest?.members?.map(function ({ name }) {
+        return name
+      }).join(" & ") : guest.name
+
+      const civility = getCivility(guest?.type)
+
+      const variables = {
+        "1": `${civility} ${name}`,
+        "2": "13/02/2026",
+        "3": "limete 15 eme rue",
+        "4": `${guest.id}?confirm=true`,
+        "5": `${guest.id}?confirm=false`
+      }
+
+      client.messages
+        .create({
+          from: `whatsapp:${twilioPhoneNumber}`,
+          contentSid: 'HX484513e6cd747182415f2585a61ff76b',
+          contentVariables: `${JSON.stringify(variables)}`,
+          to: 'whatsapp:+243817049366'
+        })
+        .then((message) => {
+          console.log(message.sid, message)
+        }).catch(function (error) {
+          console.log(`${JSON.stringify(variables)}`, variables, error)
+        })
+    }
+
+    ctx.send({ data: invitations })
   },
   async templates(ctx) {
     const { id } = ctx.request.body.data

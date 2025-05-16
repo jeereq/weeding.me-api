@@ -191,6 +191,15 @@ module.exports = {
     },
     {
       method: "POST",
+      path: "/auth/invite/createMessage",
+      handler: "auth.createMessage", 
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "POST",
       path: "/auth/invitations/commanderWithoutUser",
       handler: "auth.commanderWithoutUser",
       config: {
