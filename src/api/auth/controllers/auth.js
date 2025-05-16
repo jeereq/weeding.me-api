@@ -1,4 +1,5 @@
 "use strict";
+
 const utils = require("@strapi/utils");
 const { getService } = require("../utils");
 const bcrypt = require("bcryptjs");
