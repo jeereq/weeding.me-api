@@ -515,7 +515,7 @@ module.exports = {
         populate: true
       });
 
-    for (let index = 0; index < 1; index++) {
+    for (let index = 0; index < invitations.length; index++) {
       const guest = invitations[index];
 
       const name = guest.type != "singel" ? guest?.members?.map(function ({ name }) {
@@ -527,7 +527,7 @@ module.exports = {
       var axios = require('axios');
       var data = JSON.stringify({
         "token": "jct12tf2ybg14jv5",
-        "to": "+243817049366",
+        "to": guest.phone,
         "image": guest.userTemplate.image,
         "caption": `Bonjour ${civility} ${name}. C'est avec une immense joie que nous vous invitons à célébrer notre mariage ! ${guest.userTemplate.title} s'unissent pour la vie le ${guest.userTemplate.date} à ${guest.userTemplate.time}. Nous serions honorés de vous compter parmi nous pour partager ce moment si spécial. Merci de nous confirmer votre présence avant le ${guest.userTemplate.date}.`
       });
@@ -546,7 +546,7 @@ module.exports = {
           console.log(response.data)
           var dataLoc = JSON.stringify({
             "token": "jct12tf2ybg14jv5",
-            "to": "+243817049366",
+            "to": guest.phone,
             "address": guest.userTemplate.address,
             "lat": guest.userTemplate.lat,
             "lng": guest.userTemplate.lng,
