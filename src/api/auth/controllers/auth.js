@@ -3,9 +3,9 @@ const utils = require("@strapi/utils");
 const { getService } = require("../utils");
 const bcrypt = require("bcryptjs");
 
-const accountSid = 'ACcdda37788c4e6ae0892304586bc60d2c'
-const authToken = '093036eba9247d9512bf914ae57d0617'
-const twilioPhoneNumber = '+16167370410'
+const accountSid = process.env.TWILIO_ACCOUNT_SID
+const authToken = process.env.TWILIO_AUTH_TOKEN
+const twilioPhoneNumber = process.env.TWILIONUM
 const client = require('twilio')(accountSid, authToken);
 const { sanitize } = utils;
 
@@ -430,12 +430,12 @@ module.exports = {
         return ctx.send({ message: "Compte bloqué" }, 400);
       }
 
-      let templates = user?.role.id == 3 ? await strapi
+      let templates = (user?.role?.id == 3) ? await strapi
         .query("api::user-template.user-template").findMany({}) :
         await strapi
           .query("api::user-template.user-template").findMany({
             where: { user: { email } }
-          })
+          });
       for (let index = 0; index < templates.length; index++) {
         const { id } = templates[index];
         const guests = await strapi
