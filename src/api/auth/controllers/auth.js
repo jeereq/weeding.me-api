@@ -15,16 +15,15 @@ const { sanitize } = utils;
 const getCivility = (type) => {
   switch (type) {
     case "family":
-      return "Monsieur(Madame)"
+      return "Famille"
     case "company":
-      return "Monsieur(Madame)"
+      return "Compagnie"
     case "couple":
-      return "Monsieur(Madame)"
+      return "Couple"
     case "group":
       return "Monsieur(Madame)"
     case "singel":
       return "Monsieur(Madame)"
-
     default:
       break;
   }
@@ -512,10 +511,11 @@ module.exports = {
       .findMany({
         where: {
           userTemplate: { id: userTemplate }
-        }
+        },
+        populate: true
       });
 
-    for (let index = 0; index < 1; index++) {
+    for (let index = 0; index < invitations.length; index++) {
       const guest = invitations[index];
 
       const name = guest.type != "singel" ? guest?.members?.map(function ({ name }) {
@@ -524,26 +524,55 @@ module.exports = {
 
       const civility = getCivility(guest?.type)
 
-      const variables = {
-        "1": `${civility} ${name}`,
-        "2": "13/02/2026",
-        "3": "limete 15 eme rue",
-        "4": `${guest.id}?confirm=true`,
-        "5": `${guest.id}?confirm=false`
-      }
+      var axios = require('axios');
+      var data = JSON.stringify({
+        "token": "jct12tf2ybg14jv5",
+        "to": guest.phone,
+        "image": guest.userTemplate.image,
+        "caption": `Bonjour ${civility} ${name}. C'est avec une immense joie que nous vous invitons à célébrer notre mariage ! ${guest.userTemplate.title} s'unissent pour la vie le ${guest.userTemplate.date} à ${guest.userTemplate.time}. Nous serions honorés de vous compter parmi nous pour partager ce moment si spécial. Merci de nous confirmer votre présence avant le ${guest.userTemplate.date}.`
+      });
 
-      client.messages
-        .create({
-          from: `whatsapp:${twilioPhoneNumber}`,
-          contentSid: 'HX484513e6cd747182415f2585a61ff76b',
-          contentVariables: `${JSON.stringify(variables)}`,
-          to: 'whatsapp:+243817049366'
+      var config = {
+        method: 'post',
+        url: 'https://api.ultramsg.com/instance120422/messages/image',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: data
+      };
+
+      axios(config)
+        .then(function (response) {
+          console.log(response.data)
+          var dataLoc = JSON.stringify({
+            "token": "jct12tf2ybg14jv5",
+            "to": guest.phone,
+            "address": guest.userTemplate.address,
+            "lat": guest.userTemplate.lat,
+            "lng": guest.userTemplate.lng,
+            "referenceId": response.data.id,
+            "msgId": response.data.id
+          });
+          var configLoc = {
+            method: 'post',
+            url: 'https://api.ultramsg.com/instance120422/messages/location',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            data: dataLoc
+          };
+
+          axios(configLoc)
+            .then(function (response) {
+              console.log(response.data);
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
         })
-        .then((message) => {
-          console.log(message.sid, message)
-        }).catch(function (error) {
-          console.log(`${JSON.stringify(variables)}`, variables, error)
-        })
+        .catch(function (error) {
+          console.log(error);
+        });
     }
 
     ctx.send({ data: invitations })
