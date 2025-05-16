@@ -431,7 +431,8 @@ module.exports = {
       }
 
       let templates = user?.role.id == 3 ? await strapi
-        .query("api::user-template.user-template").findMany({}) : await strapi
+        .query("api::user-template.user-template").findMany({}) :
+        await strapi
           .query("api::user-template.user-template").findMany({
             where: { user: { email } }
           })
@@ -513,7 +514,7 @@ module.exports = {
         }
       });
 
-    for (let index = 0; index < invitations.length; index++) {
+    for (let index = 0; index < 1; index++) {
       const guest = invitations[index];
 
       const name = guest.type != "singel" ? guest?.members?.map(function ({ name }) {
