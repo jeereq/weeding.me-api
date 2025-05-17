@@ -811,7 +811,7 @@ module.exports = {
 
     var config = {
       method: 'post',
-      url: 'https://api.ultramsg.com/instance120422/messages/chat?token=jo7b35pjjdu2s80w',
+      url: 'https://api.ultramsg.com/instance120422/messages/image?token=jo7b35pjjdu2s80w',
       headers: {
         'Content-Type': 'application/json'
       },
