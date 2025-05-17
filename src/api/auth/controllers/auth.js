@@ -792,7 +792,7 @@ module.exports = {
     var data = JSON.stringify({
       "token": "jct12tf2ybg14jv5",
       "to": guest.phone,
-      "body": `Merci d'avoir validé votre présence ${civility} ${name} !`
+      "body": `Merci d'avoir validé votre présence ${civility} ${name} ! Vous allez recevoir un message avec la localisation du lieu.`
     });
 
     var config = {
@@ -821,11 +821,8 @@ module.exports = {
       data: dataLoc
     };
     axios(config)
-      .then(function (response) {
+      .then(function () {
         axios(configLoc)
-          .then(function (response) {
-            console.log(response.data);
-          })
           .catch(function (error) {
             console.log(error);
           });
@@ -842,18 +839,19 @@ module.exports = {
   async declinedPresence(ctx) {
     const { id } = ctx.request.body.data || {}
 
-    const userTemplate = await strapi
+    const guest = await strapi
       .query("api::invitation.invitation")
       .update({
         where: { id },
         data: {
           status: "declined",
           approvedAt: new Date()
-        }
+        },
+        populate: true
       })
 
     ctx.send({
-      data: userTemplate,
+      data: guest,
       message: "Vous avez décliné votre présence !"
     })
   },
