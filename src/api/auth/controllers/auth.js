@@ -783,7 +783,7 @@ module.exports = {
         },
         populate: true
       })
-    var dataLoc = JSON.stringify({
+    const dataLoc = JSON.stringify({
       "token": "jct12tf2ybg14jv5",
       "to": guest.phone,
       "address": guest.userTemplate.address,
@@ -791,7 +791,7 @@ module.exports = {
       "lng": guest.userTemplate.lng,
     });
 
-    var configLoc = {
+    const configLoc = {
       method: 'post',
       url: 'https://api.ultramsg.com/instance120422/messages/location',
       headers: {
@@ -809,7 +809,7 @@ module.exports = {
 
     ctx.send({
       data: guest,
-      message: "Votre invitation a été activé !"
+      message: "Merci d'avoir validé votre présence !"
     })
   },
   async declinedPresence(ctx) {
@@ -827,7 +827,7 @@ module.exports = {
 
     ctx.send({
       data: userTemplate,
-      message: "Votre invitation a été decliné !"
+      message: "Vous avez décliné votre présence !"
     })
   },
   async desctiveCommand(ctx) {
