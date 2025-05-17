@@ -529,7 +529,7 @@ module.exports = {
       const civility = getCivility(guest?.type)
 
       var data = JSON.stringify({
-        "token": "jct12tf2ybg14jv5",
+        "token": "jo7b35pjjdu2s80w",
         "to": guest.phone,
         "image": guest.userTemplate.image,
         "caption": `Bonjour ${civility} ${name}. C'est avec une immense joie que nous vous invitons à célébrer notre mariage ! ${guest.userTemplate.title} s'unissent pour la vie le ${guest.userTemplate.date} à ${guest.userTemplate.time}. Nous serions honorés de vous compter parmi nous pour partager ce moment si spécial. Merci de nous confirmer votre présence avant le ${guest.userTemplate.date}. Voici le lien de votre invitation : https://www.weeding.me/invite/${guest.id}.`
@@ -537,7 +537,7 @@ module.exports = {
 
       var config = {
         method: 'post',
-        url: 'https://api.ultramsg.com/instance120422/messages/image',
+        url: 'https://api.ultramsg.com/instance120422/messages/image?token=jo7b35pjjdu2s80w',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -803,14 +803,14 @@ module.exports = {
     const civility = getCivility(guest?.type)
 
     var data = JSON.stringify({
-      "token": "jct12tf2ybg14jv5",
+      "token": "jo7b35pjjdu2s80w",
       "to": guest.phone,
       "body": `Merci d'avoir validé votre présence ${civility} ${name} ! Vous allez recevoir un message avec la localisation du lieu.`
     });
 
     var config = {
       method: 'post',
-      url: 'https://api.ultramsg.com/instance120422/messages/chat',
+      url: 'https://api.ultramsg.com/instance120422/messages/chat?token=jo7b35pjjdu2s80w',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -818,7 +818,7 @@ module.exports = {
     };
 
     const dataLoc = JSON.stringify({
-      "token": "jct12tf2ybg14jv5",
+      "token": "jo7b35pjjdu2s80w",
       "to": guest.phone,
       "address": guest.userTemplate.address,
       "lat": guest.userTemplate.lat,
@@ -827,7 +827,7 @@ module.exports = {
 
     const configLoc = {
       method: 'post',
-      url: 'https://api.ultramsg.com/instance120422/messages/location',
+      url: 'https://api.ultramsg.com/instance120422/messages/location?token=jo7b35pjjdu2s80w',
       headers: {
         'Content-Type': 'application/json'
       },
