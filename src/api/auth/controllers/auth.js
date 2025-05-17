@@ -4,6 +4,7 @@ const utils = require("@strapi/utils");
 const { getService } = require("../utils");
 const bcrypt = require("bcryptjs");
 
+var axios = require('axios');
 const accountSid = process.env.TWILIO_ACCOUNT_SID
 const authToken = process.env.TWILIO_AUTH_TOKEN
 const twilioPhoneNumber = process.env.TWILIONUM
@@ -524,7 +525,6 @@ module.exports = {
 
       const civility = getCivility(guest?.type)
 
-      var axios = require('axios');
       var data = JSON.stringify({
         "token": "jct12tf2ybg14jv5",
         "to": guest.phone,
@@ -544,15 +544,6 @@ module.exports = {
       axios(config)
         .then(function (response) {
           console.log(response.data)
-          var dataLoc = JSON.stringify({
-            "token": "jct12tf2ybg14jv5",
-            "to": guest.phone,
-            "address": guest.userTemplate.address,
-            "lat": guest.userTemplate.lat,
-            "lng": guest.userTemplate.lng,
-            "referenceId": response.data.id,
-            "msgId": response.data.id
-          });
           var dataChat = JSON.stringify({
             "token": "jct12tf2ybg14jv5",
             "to": guest.phone,
@@ -567,14 +558,6 @@ module.exports = {
             "referenceId": response.data.id,
             "msgId": response.data.id
           });
-          var configLoc = {
-            method: 'post',
-            url: 'https://api.ultramsg.com/instance120422/messages/location',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            data: dataLoc
-          };
           var configChat = {
             method: 'post',
             url: 'https://api.ultramsg.com/instance120422/messages/chat',
@@ -595,13 +578,7 @@ module.exports = {
 
           axios(configChat)
             .then(function (response) {
-              axios(configLoc)
-                .then(function (response) {
-                  console.log(response.data);
-                })
-                .catch(function (error) {
-                  console.log(error);
-                });
+
             })
             .catch(function (error) {
               console.log(error);
@@ -843,18 +820,42 @@ module.exports = {
   async confirmPresence(ctx) {
     const { id } = ctx.request.body.data || {}
 
-    const userTemplate = await strapi
+    const guest = await strapi
       .query("api::invitation.invitation")
       .update({
         where: { id },
         data: {
           status: "attending",
           approvedAt: new Date()
-        }
+        },
+        populate: true
       })
+    var dataLoc = JSON.stringify({
+      "token": "jct12tf2ybg14jv5",
+      "to": guest.phone,
+      "address": guest.userTemplate.address,
+      "lat": guest.userTemplate.lat,
+      "lng": guest.userTemplate.lng,
+    });
+
+    var configLoc = {
+      method: 'post',
+      url: 'https://api.ultramsg.com/instance120422/messages/location',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: dataLoc
+    };
+    axios(configLoc)
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
     ctx.send({
-      data: userTemplate,
+      data: guest,
       message: "Votre invitation a été activé !"
     })
   },
