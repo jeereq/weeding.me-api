@@ -795,6 +795,42 @@ module.exports = {
       message: "Invité supprimer !"
     })
   },
+  async confirmPresence(ctx) {
+    const { id } = ctx.request.body.data || {}
+
+    const userTemplate = await strapi
+      .query("api::invitation.invitation")
+      .update({
+        where: { id },
+        data: {
+          status: "attending",
+          approvedAt: new Date()
+        }
+      })
+
+    ctx.send({
+      data: userTemplate,
+      message: "Votre invitation a été activé !"
+    })
+  },
+  async declinedPresence(ctx) {
+    const { id } = ctx.request.body.data || {}
+
+    const userTemplate = await strapi
+      .query("api::invitation.invitation")
+      .update({
+        where: { id },
+        data: {
+          status: "declined",
+          approvedAt: new Date()
+        }
+      })
+
+    ctx.send({
+      data: userTemplate,
+      message: "Votre invitation a été decliné !"
+    })
+  },
   async desctiveCommand(ctx) {
     const { id } = ctx.request.body.data || {}
 

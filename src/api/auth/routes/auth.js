@@ -191,6 +191,24 @@ module.exports = {
     },
     {
       method: "POST",
+      path: "/auth/invite/active",
+      handler: "auth.confirmPresence", 
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "POST",
+      path: "/auth/invite/desactive",
+      handler: "auth.declinedPresence", 
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "POST",
       path: "/auth/invite/createMessage",
       handler: "auth.createMessage", 
       config: {
