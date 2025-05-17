@@ -511,7 +511,10 @@ module.exports = {
       .query("api::invitation.invitation")
       .findMany({
         where: {
-          userTemplate: { id: userTemplate }
+          userTemplate: { id: userTemplate },
+          status: {
+            $eq: "noStarted"
+          }
         },
         populate: true
       });
@@ -543,6 +546,16 @@ module.exports = {
 
       axios(config)
         .then(function (response) {
+          strapi
+            .query("api::invitation.invitation")
+            .update({
+              where: {
+                id: guest.id,
+              },
+              data: {
+                status: "pending"
+              }
+            });
           console.log(response.data)
         })
         .catch(function (error) {
