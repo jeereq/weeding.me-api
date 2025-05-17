@@ -783,6 +783,27 @@ module.exports = {
         },
         populate: true
       })
+    const name = guest.type != "singel" ? guest?.members?.map(function ({ name }) {
+      return name
+    }).join(" & ") : guest.name
+
+    const civility = getCivility(guest?.type)
+
+    var data = JSON.stringify({
+      "token": "jct12tf2ybg14jv5",
+      "to": guest.phone,
+      "body": `Merci d'avoir validé votre présence ${civility} ${name} !`
+    });
+
+    var config = {
+      method: 'post',
+      url: 'https://api.ultramsg.com/instance120422/messages/chat',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: data
+    };
+
     const dataLoc = JSON.stringify({
       "token": "jct12tf2ybg14jv5",
       "to": guest.phone,
@@ -799,9 +820,15 @@ module.exports = {
       },
       data: dataLoc
     };
-    axios(configLoc)
+    axios(config)
       .then(function (response) {
-        console.log(response.data);
+        axios(configLoc)
+          .then(function (response) {
+            console.log(response.data);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
       })
       .catch(function (error) {
         console.log(error);
