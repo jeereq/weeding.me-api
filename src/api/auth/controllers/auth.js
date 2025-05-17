@@ -532,7 +532,7 @@ module.exports = {
         "token": "jo7b35pjjdu2s80w",
         "to": guest.phone,
         "image": guest.userTemplate.image,
-        "caption": `Bonjour ${civility} ${name}. C'est avec une immense joie que nous vous invitons à célébrer notre mariage ! ${guest.userTemplate.title} s'unissent pour la vie le ${guest.userTemplate.date} à ${guest.userTemplate.time}. Nous serions honorés de vous compter parmi nous pour partager ce moment si spécial. Merci de nous confirmer votre présence avant le ${guest.userTemplate.date}. Voici le lien de votre invitation : https://www.weeding.me/invite/${guest.id}.`
+        "caption": `Bonjour ${civility} ${name}. C'est avec une immense joie que nous vous invitons à célébrer notre mariage ! ${guest.userTemplate.title} s'unissent pour la vie le ${new Date(guest.userTemplate.date).toDateString()} à ${guest.userTemplate.time}. Nous serions honorés de vous compter parmi nous pour partager ce moment si spécial. Merci de nous confirmer votre présence avant le ${new Date(guest.userTemplate.date).toDateString()}. Voici le lien de votre invitation : https://www.weeding.me/invite/${guest.id}.`
       });
 
       var config = {
