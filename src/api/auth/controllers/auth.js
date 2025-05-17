@@ -805,7 +805,8 @@ module.exports = {
     var data = JSON.stringify({
       "token": "jo7b35pjjdu2s80w",
       "to": guest.phone,
-      "body": `Merci d'avoir validé votre présence ${civility} ${name} ! Vous allez recevoir un message avec la localisation du lieu.`
+      "image": guest.userTemplate.image,
+      "caption": `Merci d'avoir validé votre présence ${civility} ${name} ! Vous allez recevoir un message avec la localisation du lieu.`
     });
 
     var config = {
