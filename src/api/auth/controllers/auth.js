@@ -529,7 +529,7 @@ module.exports = {
         "token": "jct12tf2ybg14jv5",
         "to": guest.phone,
         "image": guest.userTemplate.image,
-        "caption": `Bonjour ${civility} ${name}. C'est avec une immense joie que nous vous invitons à célébrer notre mariage ! ${guest.userTemplate.title} s'unissent pour la vie le ${guest.userTemplate.date} à ${guest.userTemplate.time}. Nous serions honorés de vous compter parmi nous pour partager ce moment si spécial. Merci de nous confirmer votre présence avant le ${guest.userTemplate.date}.`
+        "caption": `Bonjour ${civility} ${name}. C'est avec une immense joie que nous vous invitons à célébrer notre mariage ! ${guest.userTemplate.title} s'unissent pour la vie le ${guest.userTemplate.date} à ${guest.userTemplate.time}. Nous serions honorés de vous compter parmi nous pour partager ce moment si spécial. Merci de nous confirmer votre présence avant le ${guest.userTemplate.date}. Voici le lien de votre invitation : https://www.weeding.me/invite/${guest.id}.`
       });
 
       var config = {
@@ -544,53 +544,6 @@ module.exports = {
       axios(config)
         .then(function (response) {
           console.log(response.data)
-          var dataChat = JSON.stringify({
-            "token": "jct12tf2ybg14jv5",
-            "to": guest.phone,
-            "body": `Confirmer votre présence en clickant sur le lien : https://www.weeding.me/invite/${guest.id}?confirm=tue`,
-            "referenceId": response.data.id,
-            "msgId": response.data.id
-          });
-          var dataChatDeclined = JSON.stringify({
-            "token": "jct12tf2ybg14jv5",
-            "to": guest.phone,
-            "body": `Decliner votre présence en clickant sur le lien : https://www.weeding.me/invite/${guest.id}?confirm=false`,
-            "referenceId": response.data.id,
-            "msgId": response.data.id
-          });
-          var configChat = {
-            method: 'post',
-            url: 'https://api.ultramsg.com/instance120422/messages/chat',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            data: dataChat
-          };
-          var configChatDeclined = {
-            method: 'post',
-            url: 'https://api.ultramsg.com/instance120422/messages/chat',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            data: dataChatDeclined
-          };
-
-
-          axios(configChat)
-            .then(function (response) {
-
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-
-          axios(configChatDeclined)
-            .then(function (response) {
-              console.log(response.data);
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
         })
         .catch(function (error) {
           console.log(error);
@@ -830,7 +783,7 @@ module.exports = {
         },
         populate: true
       })
-    var dataLoc = JSON.stringify({
+    const dataLoc = JSON.stringify({
       "token": "jct12tf2ybg14jv5",
       "to": guest.phone,
       "address": guest.userTemplate.address,
@@ -838,7 +791,7 @@ module.exports = {
       "lng": guest.userTemplate.lng,
     });
 
-    var configLoc = {
+    const configLoc = {
       method: 'post',
       url: 'https://api.ultramsg.com/instance120422/messages/location',
       headers: {
@@ -856,7 +809,7 @@ module.exports = {
 
     ctx.send({
       data: guest,
-      message: "Votre invitation a été activé !"
+      message: "Merci d'avoir validé votre présence !"
     })
   },
   async declinedPresence(ctx) {
@@ -874,7 +827,7 @@ module.exports = {
 
     ctx.send({
       data: userTemplate,
-      message: "Votre invitation a été decliné !"
+      message: "Vous avez décliné votre présence !"
     })
   },
   async desctiveCommand(ctx) {
