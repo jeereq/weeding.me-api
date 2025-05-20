@@ -451,6 +451,7 @@ export interface ApiUserTemplateUserTemplate extends Schema.CollectionType {
     image: Attribute.Text;
     price: Attribute.Float & Attribute.DefaultTo<0>;
     invitationsUser: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
+    boissons: Attribute.JSON;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
