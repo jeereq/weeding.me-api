@@ -101,6 +101,9 @@
     "invitationsUser": {
       "type": "biginteger",
       "default": "0"
+    },
+    "boissons": {
+      "type": "json"
     }
   }
 }
