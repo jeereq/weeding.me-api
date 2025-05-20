@@ -391,6 +391,7 @@ export interface ApiInvitationInvitation extends Schema.CollectionType {
       Attribute.DefaultTo<'noStarted'>;
     approvedAt: Attribute.DateTime;
     members: Attribute.JSON;
+    boissons: Attribute.JSON;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
