@@ -5,11 +5,6 @@ const { getService } = require("../utils");
 const bcrypt = require("bcryptjs");
 
 var axios = require('axios');
-const accountSid = process.env.TWILIO_ACCOUNT_SID
-const authToken = process.env.TWILIO_AUTH_TOKEN
-const twilioPhoneNumber = process.env.TWILIONUM
-
-const client = require('twilio')(accountSid, authToken);
 
 const { sanitize } = utils;
 
