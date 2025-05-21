@@ -642,14 +642,12 @@ module.exports = {
   },
   async commandeUpdate(ctx) {
     const { id, ...data } = ctx.request.body.data || {}
-
     const invitation = await strapi
       .query("api::user-template.user-template")
       .update({
         where: { id },
         data
-      })
-
+      });
     ctx.send({
       data: invitation,
       message: "Votre commande a été modifié !"
